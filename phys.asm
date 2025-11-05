@@ -22,18 +22,39 @@ Init:
         ld bc, EndTiles - Tiles
         call Memcpy
 
+	ld de, Object
+	ld hl, $8000
+	ld bc, EndObject - Object
+	call Memcpy
+
         ld d,  0
         ld hl, $9800
         ld bc, $400
         call Memset
 
+	ld d, 1
+	ld hl, $9A20
+	ld bc, $20
+	call Memset
+
+	call ClearOAM
+
+	ld hl, _OAMRAM
+	ld b, $10
+	ld c, $16
+	ld d, 0
+	ld e, 0
+	call CreateObj
+
 	; Turn the LCD on
-	ld a, LCDCF_ON | LCDCF_BGON
+	ld a, LCDCF_ON | LCDCF_BGON | LCDCF_OBJON
 	ld [rLCDC], a
 
 	; During the first (blank) frame, initialize display registers
 	ld a, %00011011
 	ld [rBGP], a
+	ld a, %11100100
+	ld [rOBP0], a
 
 Process:
 	jp Process
