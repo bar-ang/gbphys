@@ -27,3 +27,28 @@ Memset:
         jp nz, Memset
         ret
         
+ClearOAM:
+        ld de, 0
+        ld hl, _OAMRAM
+        ld bc, 160
+        call Memset
+        ret
+
+; @param hl - obj address
+; @param b - x coord
+; @param c - y coord
+; @param d - tile ID
+; @param e - flags
+CreateObj:
+        ld a, c
+        add a, 16
+        ld [hli], a
+        ld a, b
+        add a, 8
+        ld [hli], a
+        ld a, d
+        ld [hli], a
+        ld a, e
+        ld [hli], a
+        ret
+        
