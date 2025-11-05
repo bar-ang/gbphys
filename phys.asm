@@ -3,10 +3,10 @@ INCLUDE "common.asm"
 INCLUDE "tiles.asm"
 
 SECTION "Header", ROM0[$100]
-	jp Main
+	jp Init
 	ds $150 - @, 0 ; Make room for the header
 
-Main:
+Init:
 	; Shut down audio circuitry
 	ld a, 0
 	ld [rNR52], a
@@ -19,7 +19,7 @@ Main:
 
         ld de, Tiles
         ld hl, $9000
-        ld bc, TilesEnd - Tiles
+        ld bc, EndTiles - Tiles
         call Memcpy
 
         ld d,  0
@@ -35,3 +35,5 @@ Main:
 	ld a, %00011011
 	ld [rBGP], a
 
+Process:
+	jp Process
