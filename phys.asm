@@ -57,4 +57,21 @@ Init:
 	ld [rOBP0], a
 
 Process:
+	ld a, [wFrame]
+	inc a
+	ld [wFrame], a
+	call WaitVBlank
+
+	ld a, [wFrame]
+	and a, 0x1F
+	jp nz, Process
+
+	ld hl, _OAMRAM
+	ld b, 0
+	ld c, 1
+	call ObjTranslate
+
 	jp Process
+
+SECTION "Counter", WRAM0
+	wFrame: db
