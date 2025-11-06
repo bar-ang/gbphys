@@ -4,7 +4,7 @@
 # or set GAME variable inside this file.
 
 # Default game name (without extension)
-GAME ?= main
+GAME ?= phys
 
 # Tools
 RGBASM = rgbasm
