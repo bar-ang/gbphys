@@ -52,3 +52,11 @@ CreateObj:
         ld [hli], a
         ret
         
+ObjTranslate:
+        ld a, [hl]
+        add a, c
+        ld [hli], a
+        ld a, [hl]
+        add a, b
+        ld [hli], a
+        ret
