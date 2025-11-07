@@ -51,6 +51,15 @@ CreateObj:
         ld a, e
         ld [hli], a
         ret
+
+ObjGetPosition:
+        ld a, [hli]
+        sub a, 16
+        ld c, a
+        ld a, [hli]
+        sub a, 8
+        ld b, a
+        ret
         
 ObjTranslate:
         ld a, [hl]
