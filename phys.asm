@@ -67,6 +67,17 @@ Process:
 	jp nz, Process
 
 	ld hl, _OAMRAM
+	call ObjGetPosition
+	ld a, c
+	add a, 5
+	ld c, a
+	call GetTilePos
+	call GetTile
+	
+	cp a, 0
+	jp nz, Process
+
+	ld hl, _OAMRAM
 	ld b, 0
 	ld c, 1
 	call ObjTranslate
