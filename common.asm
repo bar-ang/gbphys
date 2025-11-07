@@ -69,3 +69,48 @@ ObjTranslate:
         add a, b
         ld [hli], a
         ret
+
+; @param bc: x,y coord
+; @return block position in bc reg
+GetTilePos:
+        ld d, b
+        ld e, c
+
+        ; replacing pixel coords with block pos
+        ; this is done by simple division in 8
+        srl d
+        srl d
+        srl d
+
+        srl e
+        srl e
+        srl e
+
+        ; in 'b' we put the two upper bit of y
+        ; note that x, y are both 5 bits
+        ld b, e
+        srl b
+        srl b
+        srl b
+
+        ; in c we put the three lower bits of y
+        ; and concat to them the value of x
+        ld a, e
+        sla a
+        sla a
+        sla a
+        sla a
+        sla a
+        or a, d
+        ld c, a
+        
+        ret
+
+; @param bc - position
+; @return tile in a reg
+; @note Guarantee not to violate the value in BC!
+GetTile:
+        ld hl, $9800
+        add hl, bc
+        ld a, [hl]
+        ret
