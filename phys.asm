@@ -100,7 +100,6 @@ Process:
 	and a, PADF_LEFT
 	jp z, .post_left
 	
-	; Move the paddle one pixel to the left.
 	ld a, [_OAMRAM + 1]
 	dec a
 	ld [_OAMRAM + 1], a
@@ -111,7 +110,6 @@ Process:
 	and a, PADF_RIGHT
 	jp z, .post_right
 	
-	; Move the paddle one pixel to the left.
 	ld a, [_OAMRAM + 1]
 	inc a
 	ld [_OAMRAM + 1], a
