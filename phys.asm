@@ -60,10 +60,10 @@ Init:
 	call InitKeys
 
 Process:
+	call WaitVBlank
 	ld a, [wFrame]
 	inc a
 	ld [wFrame], a
-	call WaitVBlank
 
 	; obj fall down
 	ld a, [wFrame]
