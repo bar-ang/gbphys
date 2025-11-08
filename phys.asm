@@ -67,7 +67,7 @@ Process:
 
 	; obj fall down
 	ld a, [wFrame]
-	and a, 0x1F
+	and a, 0x01
 	jp nz, .post_falldown
 
 	ld hl, _OAMRAM
