@@ -1,11 +1,11 @@
 SECTION "Common", ROM0
 
 WaitVBlank:
-	ld a, [rLY]
-	cp 144
-	jp c, WaitVBlank
+        .wait2:
+        ld a, [rLY]
+        cp 144
+        jp c, WaitVBlank
         ret
-
 
 Memcpy:
         ld a, [de]
