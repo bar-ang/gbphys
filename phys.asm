@@ -59,6 +59,10 @@ Init:
 
 	call InitKeys
 
+	; init attributes
+	ld a, 1
+	ld [wVelocity], a
+
 Process:
 	call WaitVBlank
 	ld a, [wFrame]
@@ -83,7 +87,8 @@ Process:
 
 	ld hl, _OAMRAM
 	ld b, 0
-	ld c, 1
+	ld a, [wVelocity]
+	ld c, a
 	call ObjTranslate
 	.post_falldown:
 
@@ -113,6 +118,9 @@ Process:
 	.post_right:
 
 	jp Process
+
+SECTION "Attributes", WRAM0
+	wVelocity: db
 
 SECTION "Counter", WRAM0
 	wFrame: db
