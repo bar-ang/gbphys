@@ -65,9 +65,10 @@ Process:
 	ld [wFrame], a
 	call WaitVBlank
 
+	; obj fall down
 	ld a, [wFrame]
 	and a, 0x1F
-	jp nz, Process
+	jp nz, .post_falldown
 
 	ld hl, _OAMRAM
 	call ObjGetPosition
@@ -78,12 +79,13 @@ Process:
 	call GetTile
 	
 	cp a, 0
-	jp nz, Process
+	jp nz, .post_falldown
 
 	ld hl, _OAMRAM
 	ld b, 0
 	ld c, 1
 	call ObjTranslate
+	.post_falldown:
 
 	; handle keyboard input
 	call UpdateKeys
