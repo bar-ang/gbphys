@@ -1,4 +1,5 @@
 INCLUDE "hardware.inc"
+INCLUDE "io.asm"
 INCLUDE "common.asm"
 INCLUDE "tiles.asm"
 
@@ -56,6 +57,8 @@ Init:
 	ld a, %11100100
 	ld [rOBP0], a
 
+	call InitKeys
+
 Process:
 	ld a, [wFrame]
 	inc a
@@ -81,6 +84,9 @@ Process:
 	ld b, 0
 	ld c, 1
 	call ObjTranslate
+
+	; handle keyboard input
+	call UpdateKeys
 
 	jp Process
 
