@@ -149,7 +149,7 @@ Process:
 	
 	ld a, 2
 	ld [wMoveState], a
-	ld a, 100
+	ld a, 60
 	ld [wJumper], a
 	ld a, -1
 	ld [wVelocity],a
