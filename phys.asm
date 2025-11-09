@@ -62,34 +62,58 @@ Init:
 	; init attributes
 	ld a, 1
 	ld [wVelocity], a
-
+	ld a, 0
+	ld [wJumper], a
+	ld a, 1 ; start FALLING
+	ld [wMoveState], a
+	
 Process:
 	call WaitVBlank
 	ld a, [wFrame]
 	inc a
 	ld [wFrame], a
 
-	; obj fall down
-	ld a, [wFrame]
-	and a, 0x01
-	jp nz, .post_falldown
+	ld a, [wMoveState]
+	cp 0
+	jp z, .post_switch
+	cp 1
+	jp z, .fall
+	cp 2
+	jp z, .jump
+	jp .post_switch ; default
 
-	ld a, [wVelocity]
-	bit 7, a ; meaning: a < 0
-	jp nz, .fall_anyway
-	
-	call getTilePipeline
-	cp a, 0
-	jp nz, .post_falldown
+	.jump:
+		ld a, [wJumper]
+		dec a
+		ld [wJumper], a
+		cp a, 0
+		jp nz, .fall
+		ld a, 1
+		ld [wVelocity], a
+		ld [wMoveState], a
+		jp .post_switch
+	.fall:
+		; obj fall down
+		ld a, [wFrame]
+		and a, 0x01
+		jp nz, .post_switch
 
-	.fall_anyway:
-	ld hl, _OAMRAM
-	ld b, 0
-	ld a, [wVelocity]
-	ld c, a
-	call ObjTranslate
-	.post_falldown:
+		ld hl, _OAMRAM
+		ld b, 0
+		ld a, [wVelocity]
+		ld c, a
+		call ObjTranslate
+		
+		call getTilePipeline
+		cp a, 1
+		jp nz, .post_switch
 
+		; switch to REST if hitting the ground
+		ld a, 0
+		ld [wMoveState], a
+		
+		jp .post_switch
+	.post_switch:
 	; handle keyboard input
 	call UpdateKeys
 
@@ -115,17 +139,20 @@ Process:
 
 
 	; Up
+	ld a, [wMoveState]
+	cp 0
+	jp nz, .post_up
+
 	ld a, [wNewKeys]
 	and a, PADF_UP
 	jp z, .post_up
-
-	call getTilePipeline
-	cp a, 0
-	jp z, .post_up
-
-	ld a, [wVelocity]
-	sub a, 3
-	ld [wVelocity], a
+	
+	ld a, 2
+	ld [wMoveState], a
+	ld a, 100
+	ld [wJumper], a
+	ld a, -1
+	ld [wVelocity],a
 	.post_up:
 
 	jp Process
@@ -142,6 +169,12 @@ getTilePipeline:
 
 SECTION "Attributes", WRAM0
 	wVelocity: db
+	wJumper: db
+
+	; 0 - rest
+	; 1 - fall
+	; 2 - jump
+	wMoveState: db
 
 SECTION "Counter", WRAM0
 	wFrame: db
