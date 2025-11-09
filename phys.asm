@@ -95,7 +95,7 @@ Process:
 	; handle keyboard input
 	call UpdateKeys
 
-	Left:
+	; Left
 	ld a, [wCurKeys]
 	and a, PADF_LEFT
 	jp z, .post_left
@@ -105,7 +105,7 @@ Process:
 	ld [_OAMRAM + 1], a
 	.post_left:
 
-	Right:
+	; Right
 	ld a, [wCurKeys]
 	and a, PADF_RIGHT
 	jp z, .post_right
