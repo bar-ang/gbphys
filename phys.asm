@@ -74,11 +74,15 @@ Process:
 	and a, 0x01
 	jp nz, .post_falldown
 
-	call getTilePipeline
+	ld a, [wVelocity]
+	bit 7, a ; meaning: a < 0
+	jp nz, .fall_anyway
 	
+	call getTilePipeline
 	cp a, 0
 	jp nz, .post_falldown
 
+	.fall_anyway:
 	ld hl, _OAMRAM
 	ld b, 0
 	ld a, [wVelocity]
@@ -108,6 +112,21 @@ Process:
 	inc a
 	ld [_OAMRAM + 1], a
 	.post_right:
+
+
+	; Up
+	ld a, [wNewKeys]
+	and a, PADF_UP
+	jp z, .post_up
+
+	call getTilePipeline
+	cp a, 0
+	jp z, .post_up
+
+	ld a, [wVelocity]
+	sub a, 3
+	ld [wVelocity], a
+	.post_up:
 
 	jp Process
 
