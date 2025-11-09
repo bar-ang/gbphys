@@ -41,8 +41,8 @@ Init:
 	call ClearOAM
 
 	ld hl, _OAMRAM
-	ld b, $10
-	ld c, $16
+	ld b, $40
+	ld c, $66
 	ld d, 0
 	ld e, 0
 	call CreateObj
