@@ -74,13 +74,7 @@ Process:
 	and a, 0x01
 	jp nz, .post_falldown
 
-	ld hl, _OAMRAM
-	call ObjGetPosition
-	ld a, c
-	add a, 5
-	ld c, a
-	call GetTilePos
-	call GetTile
+	call getTilePipeline
 	
 	cp a, 0
 	jp nz, .post_falldown
@@ -116,6 +110,16 @@ Process:
 	.post_right:
 
 	jp Process
+
+getTilePipeline:
+	ld hl, _OAMRAM
+	call ObjGetPosition
+	ld a, c
+	add a, 5
+	ld c, a
+	call GetTilePos
+	call GetTile
+	ret
 
 SECTION "Attributes", WRAM0
 	wVelocity: db
