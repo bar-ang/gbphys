@@ -155,6 +155,15 @@ Process:
 	ld [wVelocity],a
 	.post_up:
 
+	; animate the player
+	ld a, [wFrame]
+	and a, 0x7
+	jp nz, .post_animate
+	ld a, [_OAMRAM + 2]
+	xor a, 1
+	ld [_OAMRAM + 2], a
+	.post_animate:
+
 	jp Process
 
 getTilePipeline:
