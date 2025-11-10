@@ -41,12 +41,12 @@ Init:
 	ld bc, EndObject - Object
 	call Memcpy
 
-        ld d,  0
+        ld d,  BG_VRAM
         ld hl, $9800
         ld bc, $400
         call Memset
 
-	ld d, 1
+	ld d, FLOOR_VRAM
 	ld hl, $9A20
 	ld bc, $20
 	call Memset
@@ -119,7 +119,7 @@ Process:
 		call ObjTranslate
 		
 		call getTilePipeline
-		cp a, 1
+		cp a, FLOOR_VRAM
 		jp nz, .post_switch
 
 		; switch to REST if hitting the ground

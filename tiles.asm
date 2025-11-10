@@ -1,3 +1,5 @@
+DEF BG_VRAM     EQU 0
+DEF FLOOR_VRAM  EQU 1
 
 SECTION "Tile data", ROM0
 Tiles:
