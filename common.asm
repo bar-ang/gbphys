@@ -1,12 +1,17 @@
 SECTION "Common", ROM0
 
+DEF VISIBLE_RLY EQU 144
+DEF X_OFFSET    EQU 8
+DEF Y_OFFSET    EQU 16
+DEF OAMSIZE     EQU 160
+
 WaitVBlank:
         ld a, [rLY]
-        cp 144
+        cp VISIBLE_RLY
         jp nc, WaitVBlank
         .wait2:
         ld a, [rLY]
-        cp 144
+        cp VISIBLE_RLY
         jp c, .wait2
         ret
 
@@ -33,7 +38,7 @@ Memset:
 ClearOAM:
         ld de, 0
         ld hl, _OAMRAM
-        ld bc, 160
+        ld bc, OAMSIZE
         call Memset
         ret
 
@@ -44,10 +49,10 @@ ClearOAM:
 ; @param e - flags
 CreateObj:
         ld a, c
-        add a, 16
+        add a, Y_OFFSET
         ld [hli], a
         ld a, b
-        add a, 8
+        add a, X_OFFSET
         ld [hli], a
         ld a, d
         ld [hli], a
@@ -57,10 +62,10 @@ CreateObj:
 
 ObjGetPosition:
         ld a, [hli]
-        sub a, 16
+        sub a, Y_OFFSET
         ld c, a
         ld a, [hli]
-        sub a, 8
+        sub a, X_OFFSET
         ld b, a
         ret
         
