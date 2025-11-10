@@ -77,8 +77,7 @@ Init:
 	ld [wVelocity], a
 	ld a, 0
 	ld [wJumper], a
-	ld a, MOVE_STATE_FALL
-	ld [wMoveState], a
+	call changeStateFALL
 	
 Process:
 	call WaitVBlank
@@ -103,8 +102,7 @@ Process:
 		jp nz, .fall
 		ld a, 1
 		ld [wVelocity], a
-		ld a, MOVE_STATE_FALL
-		ld [wMoveState], a
+		call changeStateFALL
 		jp .post_switch
 	.fall:
 		; obj fall down
@@ -123,8 +121,7 @@ Process:
 		jp nz, .post_switch
 
 		; switch to REST if hitting the ground
-		ld a, MOVE_STATE_REST
-		ld [wMoveState], a
+		call changeStateREST
 		
 		jp .post_switch
 	.post_switch:
@@ -161,8 +158,7 @@ Process:
 	and a, PADF_UP
 	jp z, .post_up
 	
-	ld a, MOVE_STATE_JUMP
-	ld [wMoveState], a
+	call changeStateJUMP
 	ld a, JUMP_HIGHT
 	ld [wJumper], a
 	ld a, -1
@@ -192,6 +188,21 @@ getTilePipeline:
 	ld c, a
 	call GetTilePos
 	call GetTile
+	ret
+
+changeStateREST:
+	ld a, MOVE_STATE_REST
+	ld [wMoveState], a
+	ret
+
+changeStateFALL:
+	ld a, MOVE_STATE_FALL
+	ld [wMoveState], a
+	ret
+
+changeStateJUMP:
+	ld a, MOVE_STATE_JUMP
+	ld [wMoveState], a
 	ret
 
 SECTION "Attributes", WRAM0
