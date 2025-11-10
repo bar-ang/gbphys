@@ -1,6 +1,11 @@
 DEF BG_VRAM     EQU 0
 DEF FLOOR_VRAM  EQU 1
 
+DEF PLAYER_WALK EQU 0 ; alternating between 0, 1
+DEF PLAYER_REST EQU 2
+DEF PLAYER_JUMP EQU 3
+
+
 SECTION "Tile data", ROM0
 Tiles:
 Background:
@@ -28,33 +33,46 @@ EndFloorTiles:
 EndTiles:
 
 Object:
-        ; rest
-        dw `00111100
-        dw `01222210
-        dw `13222231
-        dw `12322321
-        dw `13222231
-        dw `12322321
-        dw `01222210
-        dw `00111100
-
         ; move left-right I
-        dw `00211200
-        dw `01222210
-        dw `13222231
-        dw `12311321
-        dw `13211231
-        dw `12322321
-        dw `01222210
-        dw `00211200
-        dw `00211200
+        dw `00033300
+        dw `00333330
+        dw `03312333
+        dw `03111333
+        dw `03333333
+        dw `03133000
+        dw `00313300
+        dw `03113300
+
 
         ; move left-right II
-        dw `01222210
-        dw `13222231
-        dw `12333321
-        dw `13233231
-        dw `12322321
-        dw `01222210
-        dw `00211200
+        dw `00033300
+        dw `00333330
+        dw `03312333
+        dw `03111333
+        dw `03333333
+        dw `00331300
+        dw `00313300
+        dw `00013300
+
+        ; rest
+        dw `00033300
+        dw `00333330
+        dw `03312333
+        dw `03111333
+        dw `03333333
+        dw `00313300
+        dw `00313300
+        dw `00313300
+
+        ; Jump
+        dw `00033300
+        dw `00333330
+        dw `03312333
+        dw `03111333
+        dw `00333300
+        dw `00013300
+        dw `00013300
+        dw `00033300
+
+
 EndObject:
