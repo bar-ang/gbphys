@@ -193,6 +193,8 @@ getTilePipeline:
 changeStateREST:
 	ld a, MOVE_STATE_REST
 	ld [wMoveState], a
+	ld a, PLAYER_WALK
+	ld [_OAMRAM + O_TILE], a
 	ret
 
 changeStateFALL:
@@ -203,6 +205,8 @@ changeStateFALL:
 changeStateJUMP:
 	ld a, MOVE_STATE_JUMP
 	ld [wMoveState], a
+	ld a, PLAYER_JUMP
+	ld [_OAMRAM + O_TILE], a
 	ret
 
 SECTION "Attributes", WRAM0
