@@ -3,6 +3,19 @@ INCLUDE "io.asm"
 INCLUDE "common.asm"
 INCLUDE "tiles.asm"
 
+DEF SPAWN_X    EQU $40
+DEF SPAWN_Y    EQU $66
+DEF JUMP_HIGHT EQU 60
+
+DEF MOVE_STATE_REST EQU 0
+DEF MOVE_STATE_FALL EQU 1
+DEF MOVE_STATE_JUMP EQU 2
+
+DEF O_Y     EQU 0
+DEF O_X     EQU 1
+DEF O_TILE  EQU 2
+DEF O_FLAGS EQU 3
+
 SECTION "Header", ROM0[$100]
 	jp Init
 	ds $150 - @, 0 ; Make room for the header
@@ -41,8 +54,8 @@ Init:
 	call ClearOAM
 
 	ld hl, _OAMRAM
-	ld b, $40
-	ld c, $66
+	ld b, SPAWN_X
+	ld c, SPAWN_Y
 	ld d, 0
 	ld e, 0
 	call CreateObj
@@ -64,7 +77,7 @@ Init:
 	ld [wVelocity], a
 	ld a, 0
 	ld [wJumper], a
-	ld a, 1 ; start FALLING
+	ld a, MOVE_STATE_FALL
 	ld [wMoveState], a
 	
 Process:
@@ -74,11 +87,11 @@ Process:
 	ld [wFrame], a
 
 	ld a, [wMoveState]
-	cp 0
+	cp MOVE_STATE_REST
 	jp z, .post_switch
-	cp 1
+	cp MOVE_STATE_FALL
 	jp z, .fall
-	cp 2
+	cp MOVE_STATE_JUMP
 	jp z, .jump
 	jp .post_switch ; default
 
@@ -90,6 +103,7 @@ Process:
 		jp nz, .fall
 		ld a, 1
 		ld [wVelocity], a
+		ld a, MOVE_STATE_FALL
 		ld [wMoveState], a
 		jp .post_switch
 	.fall:
@@ -109,7 +123,7 @@ Process:
 		jp nz, .post_switch
 
 		; switch to REST if hitting the ground
-		ld a, 0
+		ld a, MOVE_STATE_REST
 		ld [wMoveState], a
 		
 		jp .post_switch
@@ -122,9 +136,9 @@ Process:
 	and a, PADF_LEFT
 	jp z, .post_left
 	
-	ld a, [_OAMRAM + 1]
+	ld a, [_OAMRAM + O_X]
 	dec a
-	ld [_OAMRAM + 1], a
+	ld [_OAMRAM + O_X], a
 	.post_left:
 
 	; Right
@@ -132,24 +146,24 @@ Process:
 	and a, PADF_RIGHT
 	jp z, .post_right
 	
-	ld a, [_OAMRAM + 1]
+	ld a, [_OAMRAM + O_X]
 	inc a
-	ld [_OAMRAM + 1], a
+	ld [_OAMRAM + O_X], a
 	.post_right:
 
 
 	; Up
 	ld a, [wMoveState]
-	cp 0
+	cp MOVE_STATE_REST
 	jp nz, .post_up
 
 	ld a, [wNewKeys]
 	and a, PADF_UP
 	jp z, .post_up
 	
-	ld a, 2
+	ld a, MOVE_STATE_JUMP
 	ld [wMoveState], a
-	ld a, 60
+	ld a, JUMP_HIGHT
 	ld [wJumper], a
 	ld a, -1
 	ld [wVelocity],a
@@ -163,9 +177,9 @@ Process:
 	ld a, [wFrame]
 	and a, 0x7
 	jp nz, .post_animate
-	ld a, [_OAMRAM + 2]
+	ld a, [_OAMRAM + O_TILE]
 	xor a, 1
-	ld [_OAMRAM + 2], a
+	ld [_OAMRAM + O_TILE], a
 	.post_animate:
 
 	jp Process
