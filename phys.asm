@@ -156,6 +156,10 @@ Process:
 	.post_up:
 
 	; animate the player
+	ld a, [wCurKeys]
+	and a, PADF_LEFT | PADF_RIGHT
+	jp z, .post_animate
+	
 	ld a, [wFrame]
 	and a, 0x7
 	jp nz, .post_animate
