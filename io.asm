@@ -5,6 +5,7 @@ InitKeys:
         ld a, 0
         ld [wCurKeys], a
         ld [wNewKeys], a
+        ret
 
 
 UpdateKeys:
