@@ -64,8 +64,15 @@ ObjGetPosition:
         ld a, [hli]
         sub a, Y_OFFSET
         ld c, a
+        ld a, [rSCY]
+        add a, c
+        ld c, a
+
         ld a, [hli]
         sub a, X_OFFSET
+        ld b, a
+        ld a, [rSCX]
+        add a, b
         ld b, a
         ret
         
