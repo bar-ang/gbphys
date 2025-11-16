@@ -41,15 +41,11 @@ Init:
 	ld bc, EndObject - Object
 	call Memcpy
 
-        ld d,  BG_VRAM
-        ld hl, $9800
-        ld bc, $400
-        call Memset
 
-	ld d, FLOOR_VRAM
-	ld hl, $9A20
-	ld bc, $20
-	call Memset
+	ld de, TileMap
+	ld hl, $9800
+	ld bc, EndTileMap - TileMap
+	call Memcpy
 
 	call ClearOAM
 

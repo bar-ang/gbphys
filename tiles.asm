@@ -76,3 +76,9 @@ Object:
 
 
 EndObject:
+
+SECTION "Tilemap", ROM0
+
+TileMap:
+        INCBIN "tilemap2.2bpp"
+EndTileMap:
