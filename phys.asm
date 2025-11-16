@@ -74,6 +74,10 @@ Init:
 	ld a, 0
 	ld [wJumper], a
 	call changeStateFALL
+
+	;moving the screen to bottom-left corner
+	ld a, 111
+	ld [rSCY], a
 	
 Process:
 	call WaitVBlank
