@@ -17,7 +17,7 @@ RGBFIXFLAGS = -v -p 0xFF
 # Targets
 all: $(GAME).gb
 
-$(GAME).o: *.asm
+$(GAME).o: *.asm *.2bpp
 	$(RGBASM) -o $@ $(GAME).asm
 
 $(GAME).gb: $(GAME).o
