@@ -63,6 +63,20 @@ Init:
 	ld bc, EndTileMap - TileMap
 	call Memcpy
 
+
+	ld b, NUMERAL_SIZE
+	ld d, -128
+	ld hl, 0x9c00
+	.loop:
+		ld a, d
+		ld [hli], a
+		inc d
+		dec b
+		ld a, b
+		cp a, 0
+		jp nz, .loop
+
+
 	call ClearOAM
 
 	ld hl, _OAMRAM
@@ -73,8 +87,13 @@ Init:
 	call CreateObj
 
 	; Turn the LCD on
-	ld a, LCDCF_ON | LCDCF_BGON | LCDCF_OBJON | LCDCF_WINON
+	ld a, LCDCF_ON | LCDCF_BGON | LCDCF_OBJON | LCDCF_WINON | LCDCF_WIN9C00
 	ld [rLCDC], a
+
+	ld a, 167 - 8 * NUMERAL_SIZE
+	ld [rWX], a
+	ld a, 144-8
+	ld [rWY], a
 
 	; During the first (blank) frame, initialize display registers
 	ld a, %00011011
