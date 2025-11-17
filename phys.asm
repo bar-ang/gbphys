@@ -2,6 +2,7 @@ INCLUDE "hardware.inc"
 INCLUDE "io.asm"
 INCLUDE "common.asm"
 INCLUDE "tiles.asm"
+INCLUDE "printer.asm"
 
 DEF SPAWN_X    EQU $40
 DEF SPAWN_Y    EQU $66
@@ -35,6 +36,15 @@ Init:
         ld hl, $9000
         ld bc, EndTiles - Tiles
         call Memcpy
+
+	ld bc, 0xcefa
+	push bc
+	ld bc, 0xadde
+	push bc
+	ld hl, sp + 0
+	call LoadBytesTiles
+	pop af
+	pop af ;clear the stack
 
 	ld de, Object
 	ld hl, $8000
