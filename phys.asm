@@ -67,7 +67,7 @@ Init:
 	call CreateObj
 
 	; Turn the LCD on
-	ld a, LCDCF_ON | LCDCF_BGON | LCDCF_OBJON
+	ld a, LCDCF_ON | LCDCF_BGON | LCDCF_OBJON | LCDCF_WINON
 	ld [rLCDC], a
 
 	; During the first (blank) frame, initialize display registers
