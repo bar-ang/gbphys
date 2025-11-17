@@ -213,6 +213,10 @@ Process:
 	ld [_OAMRAM + O_TILE], a
 	.post_animate:
 
+	;debug printing
+	ld hl, _OAMRAM
+	call LoadBytesTiles
+
 	jp Process
 
 getTilePipeline:
