@@ -32,6 +32,10 @@ EndFloorTiles:
 
 EndTiles:
 
+ASCII:
+        INCBIN "hexset.2bpp"
+EndASCII:
+
 Object:
         ; move left-right I
         dw `00033300
