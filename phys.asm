@@ -37,6 +37,8 @@ Init:
         ld bc, EndTiles - Tiles
         call Memcpy
 
+	ld bc, 0x3412
+	push bc
 	ld bc, 0xcefa
 	push bc
 	ld bc, 0xadde
