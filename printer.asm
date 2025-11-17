@@ -1,7 +1,7 @@
 SECTION "Printer", ROM0
 
 DEF NUMERAL      EQU 0x8800
-DEF NUMERAL_SIZE EQU 6
+DEF NUMERAL_SIZE EQU 8
 
 ; @param - pointer to the bytes we wish to print in HL
 LoadBytesTiles:
