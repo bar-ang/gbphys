@@ -79,12 +79,14 @@ Init:
 
 	call ClearOAM
 
-	ld hl, _OAMRAM
-	ld b, SPAWN_X
-	ld c, SPAWN_Y
-	ld d, 0
-	ld e, 0
-	call CreateObj
+	ld a, SPAWN_X
+	ld [Player + 0], a
+	ld a, SPAWN_Y
+	ld [Player + 1], a
+	ld a, 0
+	ld [Player + 2], a
+	ld [Player + 3], a
+	
 
 	; Turn the LCD on
 	ld a, LCDCF_ON | LCDCF_BGON | LCDCF_OBJON | LCDCF_WINON | LCDCF_WIN9C00
@@ -145,7 +147,7 @@ Process:
 		and a, 0x01
 		jp nz, .post_switch
 
-		ld hl, _OAMRAM
+		ld hl, Player
 		ld b, 0
 		ld a, [wVelocity]
 		ld c, a
@@ -168,9 +170,9 @@ Process:
 	and a, PADF_LEFT
 	jp z, .post_left
 	
-	ld a, [_OAMRAM + O_X]
+	ld a, [Player + O_X]
 	dec a
-	ld [_OAMRAM + O_X], a
+	ld [Player + O_X], a
 	.post_left:
 
 	; Right
@@ -178,9 +180,9 @@ Process:
 	and a, PADF_RIGHT
 	jp z, .post_right
 	
-	ld a, [_OAMRAM + O_X]
+	ld a, [Player + O_X]
 	inc a
-	ld [_OAMRAM + O_X], a
+	ld [Player + O_X], a
 	.post_right:
 
 
@@ -208,19 +210,21 @@ Process:
 	ld a, [wFrame]
 	and a, 0x7
 	jp nz, .post_animate
-	ld a, [_OAMRAM + O_TILE]
+	ld a, [Player + O_TILE]
 	xor a, 1
-	ld [_OAMRAM + O_TILE], a
+	ld [Player + O_TILE], a
 	.post_animate:
 
-	;debug printing
-	ld hl, _OAMRAM
-	call LoadBytesTiles
+	; ;debug printing
+	; ld hl, Player
+	; call LoadBytesTiles
+
+	call UpdateOAM
 
 	jp Process
 
 getTilePipeline:
-	ld hl, _OAMRAM
+	ld hl, Player
 	call ObjGetPosition
 	ld a, c
 	add a, 5
@@ -233,7 +237,7 @@ changeStateREST:
 	ld a, MOVE_STATE_REST
 	ld [wMoveState], a
 	ld a, PLAYER_WALK
-	ld [_OAMRAM + O_TILE], a
+	ld [Player + O_TILE], a
 	ret
 
 changeStateFALL:
@@ -245,10 +249,24 @@ changeStateJUMP:
 	ld a, MOVE_STATE_JUMP
 	ld [wMoveState], a
 	ld a, PLAYER_JUMP
-	ld [_OAMRAM + O_TILE], a
+	ld [Player + O_TILE], a
+	ret
+
+UpdateOAM:
+	ld hl, _OAMRAM
+	ld a, [Player + O_X]
+	ld b, a
+	ld a, [Player + O_Y]
+	ld c, a
+	ld a, [Player + O_TILE]
+	ld d, a
+	ld a, [Player + O_FLAGS]
+	ld e, a
+	call CreateObj
 	ret
 
 SECTION "Attributes", WRAM0
+	Player: ds 4
 	wVelocity: db
 	wJumper: db
 
