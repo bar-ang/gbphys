@@ -217,11 +217,11 @@ Process:
 	ld [Player + O_TILE], a
 	.post_animate:
 
-	; ;debug printing
-	; ld hl, Player
-	; call LoadBytesTiles
-
 	call UpdateOAM
+
+	;debug printing
+	ld hl, Player
+	call LoadBytesTiles
 
 	jp Process
 
