@@ -254,15 +254,26 @@ changeStateJUMP:
 
 UpdateOAM:
 	ld hl, _OAMRAM
-	ld a, [Player + O_X]
+	; Y coord = player.Y - SCY
+	ld a, [rSCY]
 	ld b, a
 	ld a, [Player + O_Y]
-	ld c, a
+	sub a, b
+	add a, Y_OFFSET
+	ld [hli], a
+	; X coord = player.X - SCX
+	ld a, [rSCX]
+	ld b, a
+	ld a, [Player + O_X]
+	sub a, b
+	add a, X_OFFSET
+	ld [hli], a
+	; Tile ID
 	ld a, [Player + O_TILE]
-	ld d, a
+	ld [hli], a
+	;Flags
 	ld a, [Player + O_FLAGS]
-	ld e, a
-	call CreateObj
+	ld [hli], a	
 	ret
 
 SECTION "Attributes", WRAM0
