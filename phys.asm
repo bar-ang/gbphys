@@ -175,6 +175,13 @@ Process:
 	ld a, [Player + O_X]
 	dec a
 	ld [Player + O_X], a
+
+	ld a, [wNewKeys]
+	and a, PADF_LEFT
+	jp z, .post_left
+	ld a, [Player + O_FLAGS]
+	and a, 0xDF
+	ld [Player + O_FLAGS], a
 	.post_left:
 
 	; Right
@@ -185,6 +192,13 @@ Process:
 	ld a, [Player + O_X]
 	inc a
 	ld [Player + O_X], a
+	
+	ld a, [wNewKeys]
+	and a, PADF_RIGHT
+	jp z, .post_right
+	ld a, [Player + O_FLAGS]
+	or a, 0x20
+	ld [Player + O_FLAGS], a
 	.post_right:
 
 
