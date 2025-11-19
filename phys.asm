@@ -113,6 +113,8 @@ Init:
 	call changeStateFALL
 
 	;moving the screen to bottom-left corner
+	ld a, 0
+	ld [rSCX], a
 	ld a, 111
 	ld [rSCY], a
 	
