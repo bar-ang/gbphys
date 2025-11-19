@@ -80,12 +80,12 @@ Init:
 	call ClearOAM
 
 	ld a, SPAWN_X
-	ld [Player + 0], a
+	ld [Player + O_X], a
 	ld a, SPAWN_Y
-	ld [Player + 1], a
+	ld [Player + O_Y], a
 	ld a, 0
-	ld [Player + 2], a
-	ld [Player + 3], a
+	ld [Player + O_TILE], a
+	ld [Player + O_FLAGS], a
 	
 
 	; Turn the LCD on
@@ -153,7 +153,7 @@ Process:
 		ld b, 0
 		ld a, [wVelocity]
 		ld c, a
-		call ObjTranslate
+		call PlayerTranslate
 		
 		call getTilePipeline
 		cp a, FLOOR_VRAM
@@ -227,8 +227,9 @@ Process:
 
 getTilePipeline:
 	ld hl, Player
-	call ObjGetPosition
-	ld a, c
+	ld a, [Player + O_X]
+	ld b, a
+	ld a, [Player + O_Y]
 	add a, 5
 	ld c, a
 	call GetTilePos
@@ -276,6 +277,15 @@ UpdateOAM:
 	;Flags
 	ld a, [Player + O_FLAGS]
 	ld [hli], a	
+	ret
+
+PlayerTranslate:
+	ld a, [Player + O_X]
+	add a, b
+	ld [Player + O_X], a
+	ld a, [Player + O_Y]
+	add a, c
+	ld [Player + O_Y], a
 	ret
 
 SECTION "Attributes", WRAM0

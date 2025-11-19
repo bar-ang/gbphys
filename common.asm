@@ -60,31 +60,6 @@ CreateObj:
         ld [hli], a
         ret
 
-ObjGetPosition:
-        ld a, [hli]
-        sub a, Y_OFFSET
-        ld c, a
-        ld a, [rSCY]
-        add a, c
-        ld c, a
-
-        ld a, [hli]
-        sub a, X_OFFSET
-        ld b, a
-        ld a, [rSCX]
-        add a, b
-        ld b, a
-        ret
-        
-ObjTranslate:
-        ld a, [hl]
-        add a, c
-        ld [hli], a
-        ld a, [hl]
-        add a, b
-        ld [hli], a
-        ret
-
 ; @param bc: x,y coord
 ; @return block position in bc reg
 GetTilePos:
