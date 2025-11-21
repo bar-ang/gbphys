@@ -7,7 +7,6 @@ INCLUDE "pseudo_math.asm"
 
 DEF SPAWN_X    EQU $40
 DEF SPAWN_Y    EQU $d0
-DEF JUMP_HIGHT EQU 60
 
 DEF MOVE_STATE_REST EQU 0
 DEF MOVE_STATE_FALL EQU 1
@@ -109,8 +108,6 @@ Init:
 	; init attributes
 	ld a, 1
 	ld [wVelocity], a
-	ld a, 0
-	ld [wJumper], a
 	call changeStateFALL
 
 	;moving the screen to bottom-left corner
@@ -139,10 +136,21 @@ Process:
 		dec a
 		ld [wJumper], a
 		cp a, 0
-		jp nz, .fall
-		ld a, 1
-		ld [wVelocity], a
-		call changeStateFALL
+		jp nz, .cont
+		call changeStateREST
+		jp .post_switch
+		
+		.cont:
+		ld hl, JumpFunc
+		ld a, [wJumper]
+		ld c, a
+		ld b, 0
+		add hl, bc
+		ld a, [hl]
+		ld b, a
+		ld a, [Player + O_Y]
+		sub a, b
+		ld [Player + O_Y], a
 		jp .post_switch
 	.fall:
 		; obj fall down
@@ -213,8 +221,6 @@ Process:
 	jp z, .post_up
 	
 	call changeStateJUMP
-	ld a, JUMP_HIGHT
-	ld [wJumper], a
 	ld a, -1
 	ld [wVelocity],a
 	.post_up:
@@ -268,6 +274,8 @@ changeStateJUMP:
 	ld [wMoveState], a
 	ld a, PLAYER_JUMP
 	ld [Player + O_TILE], a
+	ld a, JUMP_DURATION
+	ld [wJumper], a
 	ret
 
 UpdateOAM:
