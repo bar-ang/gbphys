@@ -84,5 +84,5 @@ EndObject:
 SECTION "Tilemap", ROM0
 
 TileMap:
-        INCBIN "tilemap2.2bpp"
+        INCBIN "tilemap.2bpp"
 EndTileMap:
