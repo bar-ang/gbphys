@@ -3,6 +3,7 @@ INCLUDE "io.asm"
 INCLUDE "common.asm"
 INCLUDE "tiles.asm"
 INCLUDE "printer.asm"
+INCLUDE "pseudo_math.asm"
 
 DEF SPAWN_X    EQU $40
 DEF SPAWN_Y    EQU $d0
