@@ -6,7 +6,7 @@ def func(x, t, m):
 
 def main(t, m):
     f = partial(func, t=t, m=m)
-    rounds = [round(f(x+1)) - round(f(x)) for x in range(t)]
+    rounds = [round(f(x+1)) - round(f(x)) for x in range(t+1)]
     unsigned = [x & 0xff for x in rounds]
     bbs = bytes(unsigned[::-1])
     print(bbs)
