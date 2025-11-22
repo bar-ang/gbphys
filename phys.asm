@@ -136,6 +136,10 @@ Process:
 		ld a, [Player + O_Y]
 		sub a, b
 		ld [Player + O_Y], a
+
+		ld a, c; note that c == [wJumper]
+		cp a, 45
+		jp c, .hit_ground_test
 		jp .post_switch
 	.fall:
 		; obj fall down
@@ -148,7 +152,8 @@ Process:
 		ld a, [wVelocity]
 		ld c, a
 		call PlayerTranslate
-		
+
+	.hit_ground_test:
 		call getTilePipeline
 		cp a, FLOOR_VRAM
 		jp nz, .post_switch
