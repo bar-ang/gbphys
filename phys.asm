@@ -106,13 +106,20 @@ Process:
 
 	ld a, [wMoveState]
 	cp MOVE_STATE_REST
-	jp z, .post_switch
+	jp z, .rest
 	cp MOVE_STATE_FALL
 	jp z, .fall
 	cp MOVE_STATE_JUMP
 	jp z, .jump
 	jp .post_switch ; default
 
+	.rest:
+		; if there's no floor below, change to FALL
+		call getTilePipeline
+		cp a, FLOOR_VRAM
+		jp z, .post_switch
+		call changeStateFALL
+		jp .post_switch
 	.jump:
 		ld a, [wJumper]
 		dec a
