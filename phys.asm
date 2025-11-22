@@ -37,21 +37,6 @@ Init:
         ld bc, EndTiles - Tiles
         call Memcpy
 
-	ld bc, 0xefcd
-	push bc
-	ld bc, 0xab89
-	push bc
-	ld bc, 0x6745
-	push bc
-	ld bc, 0x2301
-	push bc
-	ld hl, sp + 0
-	call LoadBytesTiles
-	pop af
-	pop af
-	pop af
-	pop af ;clear the stack
-
 	ld de, Object
 	ld hl, $8000
 	ld bc, EndObject - Object
