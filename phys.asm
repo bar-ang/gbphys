@@ -90,9 +90,6 @@ Init:
 
 	call InitKeys
 
-	; init attributes
-	ld a, 1
-	ld [wVelocity], a
 	call changeStateFALL
 
 	;moving the screen to bottom-left corner
@@ -149,7 +146,7 @@ Process:
 
 		ld hl, Player
 		ld b, 0
-		ld a, [wVelocity]
+		ld a, 1
 		ld c, a
 		call PlayerTranslate
 
@@ -211,8 +208,6 @@ Process:
 	jp z, .post_up
 	
 	call changeStateJUMP
-	ld a, -1
-	ld [wVelocity],a
 	.post_up:
 
 	; animate the player
@@ -328,7 +323,6 @@ PlayerTranslate:
 
 SECTION "Attributes", WRAM0
 	Player: ds 4
-	wVelocity: db
 	wJumper: db
 
 	; 0 - rest
