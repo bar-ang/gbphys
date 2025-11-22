@@ -274,7 +274,7 @@ changeStateJUMP:
 	ld [wMoveState], a
 	ld a, PLAYER_JUMP
 	ld [Player + O_TILE], a
-	ld a, JUMP_DURATION
+	ld a, JUMP_DURATION + 1
 	ld [wJumper], a
 	ret
 
