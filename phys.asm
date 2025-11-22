@@ -223,6 +223,7 @@ Process:
 	ld [Player + O_TILE], a
 	.post_animate:
 
+	call adjustScreenPos
 	call UpdateOAM
 
 	;debug printing
@@ -230,6 +231,30 @@ Process:
 	call LoadBytesTiles
 
 	jp Process
+
+adjustScreenPos:
+	ld a, [Player + O_X]
+	sub a, 80
+	jp nc, .no_edge_left
+	ld a, 0
+	.no_edge_left:
+	cp a, 96
+	jp c, .no_edge_right
+	ld a, 95
+	.no_edge_right:
+	ld [rSCX], a
+	
+	ld a, [Player + O_Y]
+	sub a, 108
+	jp nc, .no_edge_top
+	ld a, 0
+	.no_edge_top:
+	cp a, 112
+	jp c, .no_edge_bottom
+	ld a, 111
+	.no_edge_bottom:
+	ld [rSCY], a
+	ret
 
 getTilePipeline:
 	ld hl, Player
