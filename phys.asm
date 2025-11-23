@@ -300,6 +300,14 @@ UpdateOAM:
 
 ; BOTTOM LEFT
 	ld hl, _OAMRAM
+	ld a, [Player + O_FLAGS]
+	and a, 0x20
+	swap a
+	sla a
+	sla a
+	ld e, a ; now e contains 8 if object is flipped or 0 otherwise
+	; e will be used all throughout 'UpdateOAM' so don't override it!
+	
 	; Y coord = player.Y - SCY
 	ld a, [rSCY]
 	ld b, a
@@ -312,7 +320,9 @@ UpdateOAM:
 	ld b, a
 	ld a, [Player + O_X]
 	sub a, b
+	add a, e
 	add a, X_OFFSET
+	
 	ld [hli], a
 	; Tile ID
 	ld a, [Player + O_TILE]
@@ -339,6 +349,7 @@ UpdateOAM:
 	sub a, b
 	add a, X_OFFSET
 	add a, 8
+	sub a, e
 	ld [hli], a
 	; Tile ID
 	ld a, [Player + O_TILE]
@@ -365,6 +376,7 @@ UpdateOAM:
 	ld a, [Player + O_X]
 	sub a, b
 	add a, X_OFFSET
+	add a, e
 	ld [hli], a
 	; Tile ID
 	ld a, [Player + O_TILE]
@@ -390,6 +402,7 @@ UpdateOAM:
 	sub a, b
 	add a, X_OFFSET
 	add a, 8
+	sub a, e
 	ld [hli], a
 	; Tile ID
 	ld a, [Player + O_TILE]
