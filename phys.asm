@@ -183,7 +183,7 @@ Process:
 	and a, PADF_LEFT
 	jp z, .post_left
 	ld a, [Player + O_FLAGS]
-	and a, 0xDF
+	or a, 0x20
 	ld [Player + O_FLAGS], a
 	.post_left:
 
@@ -200,7 +200,7 @@ Process:
 	and a, PADF_RIGHT
 	jp z, .post_right
 	ld a, [Player + O_FLAGS]
-	or a, 0x20
+	and a, 0xDF
 	ld [Player + O_FLAGS], a
 	.post_right:
 
