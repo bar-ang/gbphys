@@ -296,6 +296,9 @@ changeStateJUMP:
 	ret
 
 UpdateOAM:
+; TODO: a macro for preventing code dup would be nice.
+
+; BOTTOM LEFT
 	ld hl, _OAMRAM
 	; Y coord = player.Y - SCY
 	ld a, [rSCY]
@@ -313,10 +316,89 @@ UpdateOAM:
 	ld [hli], a
 	; Tile ID
 	ld a, [Player + O_TILE]
+	add a, 8
 	ld [hli], a
 	;Flags
 	ld a, [Player + O_FLAGS]
-	ld [hli], a	
+	ld [hli], a
+
+
+; BOTTOM RIGHT
+	ld hl, _OAMRAM + 4
+	; Y coord = player.Y - SCY
+	ld a, [rSCY]
+	ld b, a
+	ld a, [Player + O_Y]
+	sub a, b
+	add a, Y_OFFSET
+	ld [hli], a
+	; X coord = player.X - SCX
+	ld a, [rSCX]
+	ld b, a
+	ld a, [Player + O_X]
+	sub a, b
+	add a, X_OFFSET
+	add a, 8
+	ld [hli], a
+	; Tile ID
+	ld a, [Player + O_TILE]
+	add a, 12
+	ld [hli], a
+	;Flags
+	ld a, [Player + O_FLAGS]
+	ld [hli], a
+
+
+; UPPER LEFT
+	ld hl, _OAMRAM + 8
+	; Y coord = player.Y - SCY
+	ld a, [rSCY]
+	ld b, a
+	ld a, [Player + O_Y]
+	sub a, b
+	add a, Y_OFFSET
+	sub a, 8
+	ld [hli], a
+	; X coord = player.X - SCX
+	ld a, [rSCX]
+	ld b, a
+	ld a, [Player + O_X]
+	sub a, b
+	add a, X_OFFSET
+	ld [hli], a
+	; Tile ID
+	ld a, [Player + O_TILE]
+	ld [hli], a
+	;Flags
+	ld a, [Player + O_FLAGS]
+	ld [hli], a
+
+;UPPER RIGHT
+	ld hl, _OAMRAM + 12
+	; Y coord = player.Y - SCY
+	ld a, [rSCY]
+	ld b, a
+	ld a, [Player + O_Y]
+	sub a, b
+	add a, Y_OFFSET
+	sub a, 8
+	ld [hli], a
+	; X coord = player.X - SCX
+	ld a, [rSCX]
+	ld b, a
+	ld a, [Player + O_X]
+	sub a, b
+	add a, X_OFFSET
+	add a, 8
+	ld [hli], a
+	; Tile ID
+	ld a, [Player + O_TILE]
+	add a, 4
+	ld [hli], a
+	;Flags
+	ld a, [Player + O_FLAGS]
+	ld [hli], a
+	
 	ret
 
 PlayerTranslate:
