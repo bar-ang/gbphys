@@ -1,3 +1,5 @@
+INCLUDE "object.asm"
+
 DEF BG_VRAM     EQU 0
 DEF FLOOR_VRAM  EQU 1
 
@@ -36,50 +38,6 @@ ASCII:
         INCBIN "hexset.2bpp"
 EndASCII:
 
-Object:
-        ; move left-right I
-        dw `00033300
-        dw `00333330
-        dw `03312333
-        dw `03111333
-        dw `03333333
-        dw `03133000
-        dw `00313300
-        dw `03113300
-
-
-        ; move left-right II
-        dw `00033300
-        dw `00333330
-        dw `03312333
-        dw `03111333
-        dw `03333333
-        dw `00331300
-        dw `00313300
-        dw `00013300
-
-        ; rest
-        dw `00033300
-        dw `00333330
-        dw `03312333
-        dw `03111333
-        dw `03333333
-        dw `00313300
-        dw `00313300
-        dw `00313300
-
-        ; Jump
-        dw `00033300
-        dw `00333330
-        dw `03312333
-        dw `03111333
-        dw `00333300
-        dw `00013300
-        dw `00013300
-        dw `00033300
-
-
-EndObject:
 
 SECTION "Tilemap", ROM0
 
