@@ -85,7 +85,7 @@ Init:
 	; During the first (blank) frame, initialize display registers
 	ld a, %00011011
 	ld [rBGP], a
-	ld a, %10011100
+	ld a, %00011110
 	ld [rOBP0], a
 
 	call InitKeys
