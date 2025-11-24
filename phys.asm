@@ -115,8 +115,7 @@ Process:
 
 	.rest:
 		; if there's no floor below, change to FALL
-		call getTilePipeline
-		cp a, FLOOR_VRAM
+		call TestFloorCollision
 		jp z, .post_switch
 		call changeStateFALL
 		jp .post_switch
@@ -158,8 +157,7 @@ Process:
 		call PlayerTranslate
 
 	.hit_ground_test:
-		call getTilePipeline
-		cp a, FLOOR_VRAM
+		call TestFloorCollision
 		jp nz, .post_switch
 
 		; switch to REST if hitting the ground
@@ -263,7 +261,7 @@ adjustScreenPos:
 	ld [rSCY], a
 	ret
 
-getTilePipeline:
+TestFloorCollision:
 	ld hl, Player
 	ld a, [Player + O_X]
 	add a, 8
@@ -273,6 +271,7 @@ getTilePipeline:
 	ld c, a
 	call GetTilePos
 	call GetTile
+	cp a, FLOOR_VRAM
 	ret
 
 changeStateREST:
