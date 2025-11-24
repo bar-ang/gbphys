@@ -11,23 +11,23 @@ DEF PLAYER_JUMP EQU 3
 SECTION "Tile data", ROM0
 Tiles:
 Background:
-        dw `00000000
-        dw `01010101
-        dw `00000000
-        dw `10101010
-        dw `00000000
-        dw `01010101
-        dw `00000000
-        dw `10101010
+        dw `33333333
+        dw `33333333
+        dw `33333333
+        dw `33322333
+        dw `33122133
+        dw `33333333
+        dw `33333333
+        dw `33333333
 EndBackground:
 
 FloorTiles:
-        dw `00000000
-        dw `00000000
-        dw `00000000
         dw `11111111
         dw `21212121
         dw `23232323
+        dw `33333333
+        dw `00000000
+        dw `00000000
         dw `33333333
         dw `33333333
 EndFloorTiles:

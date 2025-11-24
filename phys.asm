@@ -267,7 +267,7 @@ TestFloorCollision:
 	add a, 8
 	ld b, a
 	ld a, [Player + O_Y]
-	add a, 5
+	add a, 8
 	ld c, a
 	call GetTilePos
 	call GetTile
