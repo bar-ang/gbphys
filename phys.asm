@@ -266,6 +266,7 @@ adjustScreenPos:
 getTilePipeline:
 	ld hl, Player
 	ld a, [Player + O_X]
+	add a, 8
 	ld b, a
 	ld a, [Player + O_Y]
 	add a, 5
