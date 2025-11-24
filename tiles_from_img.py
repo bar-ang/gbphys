@@ -75,7 +75,7 @@ def main():
     if len(sys.argv) == 3:
         K = int(sys.argv[2])
     else:
-        K = 3
+        K = 4
 
     matrix = kmeans_reduce_colors(img_path, K)
 
