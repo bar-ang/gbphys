@@ -78,7 +78,9 @@ def main():
         K = 4
 
     matrix = kmeans_reduce_colors(img_path, K)
-
+    # make sure background will get value 0
+    matrix = (matrix - matrix[0][0]) % 4 
+ 
     h, w = matrix.shape
     blocks = matrix.reshape(h // 16, 16, w // 16, 16)
     blocks = blocks.swapaxes(1, 2)
