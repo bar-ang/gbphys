@@ -114,6 +114,10 @@ Init:
 
 	ld a, 0
 	ld [wEnemyMath], a
+
+	; sound control
+	call InitSound
+	call PlayBeep
 	
 Process:
 	call WaitVBlank
