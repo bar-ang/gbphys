@@ -172,6 +172,10 @@ Process:
 	ld a, [wCurKeys]
 	and a, PADF_LEFT
 	jp z, .post_left
+
+	; if there's a wall, don't move
+	call TestWallCollisionGoingLeft
+	jp z, .post_left
 	
 	ld a, [Player + O_X]
 	dec a
@@ -188,6 +192,10 @@ Process:
 	; Right
 	ld a, [wCurKeys]
 	and a, PADF_RIGHT
+	jp z, .post_right
+
+	; if there's a wall, don't move
+	call TestWallCollisionGoingRight
 	jp z, .post_right
 	
 	ld a, [Player + O_X]
@@ -272,6 +280,30 @@ TestFloorCollision:
 	call GetTilePos
 	call GetTile
 	cp a, FLOOR_VRAM
+	ret
+
+TestWallCollisionGoingLeft:
+	ld hl, Player
+	ld a, [Player + O_X]
+	sub a, 1
+	ld b, a
+	ld a, [Player + O_Y]
+	ld c, a
+	call GetTilePos
+	call GetTile
+	cp a, WALL_VRAM
+	ret
+
+TestWallCollisionGoingRight:
+	ld hl, Player
+	ld a, [Player + O_X]
+	add a, 16
+	ld b, a
+	ld a, [Player + O_Y]
+	ld c, a
+	call GetTilePos
+	call GetTile
+	cp a, WALL_VRAM
 	ret
 
 changeStateREST:
