@@ -44,6 +44,46 @@ UpdateKeys:
         .knownret
         ret
 
+InitSound:
+    ; Enable master sound
+    ld a, %10000000
+    ld [rNR52], a
+
+    ; Set output levels (100% to both L and R)
+    ld a, %01110111
+    ld [rNR50], a
+
+    ; Enable Channel 1 to both outputs
+    ld a, %00000001
+    ld [rNR51], a
+
+    ret
+
+PlayBeep:
+    ld a, %11000000      ; no sweep, but sweep register must NOT be 0x00
+    ld [rNR10], a
+
+    ; Duty cycle + length
+    ; 01xxxxxx = 12.5% duty
+    ld a, %01000000
+    ld [rNR11], a
+
+    ; Volume envelope:
+    ; 11110000 = start volume 15, no envelope
+    ld a, %11110000
+    ld [rNR12], a
+
+    ; Frequency low byte
+    ld a, $0E
+    ld [rNR13], a
+
+    ; Frequency high + trigger
+    ; 11000000: restart sound, no sweep
+    ld a, %11000110
+    ld [rNR14], a
+
+    ret
+
 SECTION "Input Variables", WRAM0
         wCurKeys: db
         wNewKeys: db
