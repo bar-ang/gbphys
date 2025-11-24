@@ -103,7 +103,6 @@ def main():
         f.write("\n".join([f"db {t}" for t in tiles_str]))
         f.write("\nEndObject:\n")
 
-    import pdb; pdb.set_trace()
     glued = concat_blocks(arranged, margin=0)
     plt.imshow(glued)
     plt.show()
