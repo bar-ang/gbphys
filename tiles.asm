@@ -2,6 +2,7 @@ INCLUDE "object.asm"
 
 DEF BG_VRAM     EQU 0
 DEF FLOOR_VRAM  EQU 1
+DEF WALL_VRAM   EQU 2
 
 DEF PLAYER_WALK EQU 0 ; alternating between 0, 1
 DEF PLAYER_REST EQU 2
@@ -31,6 +32,17 @@ FloorTiles:
         dw `33333333
         dw `33333333
 EndFloorTiles:
+
+WallTiles:
+        dw `11233311
+        dw `11222311
+        dw `11233311
+        dw `11222311
+        dw `11233311
+        dw `11222311
+        dw `11233311
+        dw `11222311
+EndWallTiles:
 
 EndTiles:
 
