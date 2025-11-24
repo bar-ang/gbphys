@@ -97,6 +97,10 @@ Init:
 	ld [rSCX], a
 	ld a, 111
 	ld [rSCY], a
+
+	; sound control
+	call InitSound
+	call PlayBeep
 	
 Process:
 	call WaitVBlank
