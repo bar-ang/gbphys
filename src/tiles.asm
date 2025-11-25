@@ -1,4 +1,4 @@
-INCLUDE "object.asm"
+INCLUDE "src/object.asm"
 
 DEF BG_VRAM     EQU 0
 DEF FLOOR_VRAM  EQU 1
@@ -47,12 +47,12 @@ EndWallTiles:
 EndTiles:
 
 ASCII:
-        INCBIN "hexset.2bpp"
+        INCBIN "assets/hexset.2bpp"
 EndASCII:
 
 
 SECTION "Tilemap", ROM0
 
 TileMap:
-        INCBIN "tilemap.2bpp"
+        INCBIN "assets/tilemap.2bpp"
 EndTileMap:

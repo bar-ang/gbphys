@@ -6,6 +6,24 @@
 # Default game name (without extension)
 GAME ?= phys
 
+# ----------------------------------------
+# Directories
+# ----------------------------------------
+SRC_DIR ?= src
+ASSETS_DIR ?= assets
+BUILD_DIR ?= build
+
+# ----------------------------------------
+# Collect all files recursively
+# ----------------------------------------
+SRC_FILES := $(shell find $(SRC_DIR) -type f)
+ASSET_FILES := $(shell find $(ASSETS_DIR) -type f)
+
+ALL_INPUTS := $(SRC_FILES) $(ASSET_FILES)
+
+# Output file
+TARGET := $(BUILD_DIR)/$(GAME)
+
 # Tools
 RGBASM = rgbasm
 RGBLINK = rgblink
@@ -14,18 +32,28 @@ RGBFIX = rgbfix
 # Flags
 RGBFIXFLAGS = -v -p 0xFF
 
-# Targets
-all: $(GAME).gb
+# Default rule
+all: $(TARGET).gb
 
-$(GAME).o: *.asm *.2bpp *.bin
-	$(RGBASM) -o $@ $(GAME).asm
+# ----------------------------------------
+# Rule to build output
+# Re-run this rule if ANY source/asset changes
+# ----------------------------------------
+$(TARGET).o: $(ALL_INPUTS)
+	@mkdir -p $(BUILD_DIR)
+	$(RGBASM) -o $@ $(SRC_DIR)/$(GAME).asm
 
-$(GAME).gb: $(GAME).o
+
+$(TARGET).gb: $(TARGET).o
 	$(RGBLINK) -o $@ $<
 	$(RGBFIX) $(RGBFIXFLAGS) $@
 
+# ----------------------------------------
+# Cleaning
+# ----------------------------------------
 clean:
-	rm -f $(GAME).o $(GAME).gb
+	rm -rf $(BUILD_DIR)
+
 
 .PHONY: all clean
 
