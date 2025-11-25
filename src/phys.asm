@@ -1,9 +1,9 @@
-INCLUDE "hardware.inc"
-INCLUDE "io.asm"
-INCLUDE "common.asm"
-INCLUDE "tiles.asm"
-INCLUDE "printer.asm"
-INCLUDE "pseudo_math.asm"
+INCLUDE "src/hardware.inc"
+INCLUDE "src/io.asm"
+INCLUDE "src/common.asm"
+INCLUDE "src/tiles.asm"
+INCLUDE "src/printer.asm"
+INCLUDE "src/pseudo_math.asm"
 
 DEF SPAWN_X    EQU $40
 DEF SPAWN_Y    EQU $d0
