@@ -1,4 +1,3 @@
-
 DEF BG_VRAM     EQU 0
 DEF FLOOR_VRAM  EQU 1
 DEF WALL_VRAM   EQU 2
@@ -79,6 +78,7 @@ SECTION "Tilemap", ROM0
 TileMap:
         INCBIN "assets/tilemap.2bpp"
 EndTileMap:
+
 
 SECTION "Data", ROM0
 
