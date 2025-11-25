@@ -1,4 +1,3 @@
-*.o
-*.gb
-*.sav
 Emulicious
+build
+files
