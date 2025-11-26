@@ -124,11 +124,11 @@ Process:
 		inc a
 		ld [wJumper], a
 		cp a, EndJumpFunc - JumpFunc - 1
-		jp nz, .cont
+		jp nz, .cont_jump
 		call changeStateREST
 		jp .post_switch
 		
-		.cont:
+		.cont_jump:
 		ld hl, JumpFunc
 		ld a, [wJumper]
 		ld c, a
