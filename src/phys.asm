@@ -3,7 +3,7 @@ INCLUDE "src/io.asm"
 INCLUDE "src/common.asm"
 INCLUDE "src/tiles.asm"
 INCLUDE "src/printer.asm"
-INCLUDE "src/pseudo_math.asm"
+INCLUDE "assets/pseudo_math.asm"
 
 DEF SPAWN_X    EQU $40
 DEF SPAWN_Y    EQU $d0
@@ -120,13 +120,13 @@ Process:
 		ld a, [wJumper]
 		inc a
 		ld [wJumper], a
-		cp a, EndJumpFunc - JumpFunc - 1
+		cp a, EndPseudoParabola - PseudoParabola - 1
 		jp nz, .cont_jump
 		call changeStateREST
 		jp .post_switch
 		
 		.cont_jump:
-		ld hl, JumpFunc
+		ld hl, PseudoParabola
 		ld a, [wJumper]
 		ld c, a
 		ld b, 0
@@ -138,7 +138,7 @@ Process:
 		ld [Player + O_Y], a
 
 		ld a, c; note that c == [wJumper]
-		cp a, JumpFunc.maximum - JumpFunc
+		cp a, PseudoParabola.maximum - PseudoParabola
 		jp nc, .hit_ground_test
 		jp .post_switch
 
@@ -304,7 +304,7 @@ StartFalling:
 	ld [wMoveState], a
 	ld a, PLAYER_JUMP
 	ld [Player + O_TILE], a
-	ld a, JumpFunc.maximum - JumpFunc + 4
+	ld a, PseudoParabola.maximum - PseudoParabola + 4
 	ld [wJumper], a
 	ret
 
