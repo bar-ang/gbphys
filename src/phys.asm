@@ -36,9 +36,9 @@ Init:
         ld bc, EndTiles - Tiles
         call Memcpy
 
-	ld de, Object
+	ld de, Objects
 	ld hl, $8000
-	ld bc, EndObject - Object
+	ld bc, EndObjects - Objects
 	call Memcpy
 
 

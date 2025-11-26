@@ -1,4 +1,3 @@
-INCLUDE "src/object.asm"
 
 DEF BG_VRAM     EQU 0
 DEF FLOOR_VRAM  EQU 1
@@ -10,6 +9,11 @@ DEF PLAYER_JUMP EQU 3
 
 
 SECTION "Tile data", ROM0
+
+Objects:
+INCLUDE "assets/player.asm"
+EndObjects:
+
 Tiles:
 Background:
         dw `00000000
