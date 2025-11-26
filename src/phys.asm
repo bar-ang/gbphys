@@ -108,7 +108,7 @@ Process:
 	cp MOVE_STATE_REST
 	jp z, .rest
 	cp MOVE_STATE_FALL
-	jp z, .fall
+	jp z, .jump
 	cp MOVE_STATE_JUMP
 	jp z, .jump
 	jp .post_switch ; default
@@ -144,17 +144,6 @@ Process:
 		cp a, JumpFunc.maximum - JumpFunc
 		jp nc, .hit_ground_test
 		jp .post_switch
-	.fall:
-		; obj fall down
-		ld a, [wFrame]
-		and a, 0x01
-		jp nz, .post_switch
-
-		ld hl, Player
-		ld b, 0
-		ld a, 1
-		ld c, a
-		call PlayerTranslate
 
 	.hit_ground_test:
 		call TestFloorCollision
@@ -314,8 +303,12 @@ changeStateREST:
 	ret
 
 changeStateFALL:
-	ld a, MOVE_STATE_FALL
+	ld a, MOVE_STATE_JUMP
 	ld [wMoveState], a
+	ld a, PLAYER_JUMP
+	ld [Player + O_TILE], a
+	ld a, JumpFunc.maximum - JumpFunc + 4
+	ld [wJumper], a
 	ret
 
 changeStateJUMP:
