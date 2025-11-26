@@ -45,19 +45,19 @@ UpdateKeys:
         ret
 
 InitSound:
-    ; Enable master sound
-    ld a, %10000000
-    ld [rNR52], a
+        ; Enable master sound
+        ld a, %10000000
+        ld [rNR52], a
 
-    ; Set output levels (100% to both L and R)
-    ld a, %01110111
-    ld [rNR50], a
+        ; Set output levels (100% to both L and R)
+        ld a, %01110111
+        ld [rNR50], a
 
-    ; Enable Channel 1 to both outputs
-    ld a, %00000001
-    ld [rNR51], a
+        ; Enable Channel 1 to both outputs
+        ld a, %00000001
+        ld [rNR51], a
 
-    ret
+        ret
 
 PlayBeep:
     ld a, %11000000      ; no sweep, but sweep register must NOT be 0x00
