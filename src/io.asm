@@ -60,29 +60,76 @@ InitSound:
         ret
 
 PlayBeep:
-    ld a, %11000000      ; no sweep, but sweep register must NOT be 0x00
-    ld [rNR10], a
+        ; --------------------------------------
+        ; Configure Channel 1 registers
+        ; --------------------------------------
 
-    ; Duty cycle + length
-    ; 01xxxxxx = 12.5% duty
-    ld a, %01000000
-    ld [rNR11], a
+        ; NR10 – Sweep (slow downward sweep)
+        ld   a, %01100111      ; period=3, decrease, shift=7
+        ld   [rNR10], a
 
-    ; Volume envelope:
-    ; 11110000 = start volume 15, no envelope
-    ld a, %11110000
-    ld [rNR12], a
+        ; NR11 – Duty + length (high volume, 50% duty)
+        ld   a, %01000000      ; duty=01 (50%), length=0
+        ld   [rNR11], a
 
-    ; Frequency low byte
-    ld a, $0E
-    ld [rNR13], a
+        ; NR12 – Envelope: start loud, fade slowly
+        ld   a, %11110111      ; initial=15, decay, sweep=7
+        ld   [rNR12], a
 
-    ; Frequency high + trigger
-    ; 11000000: restart sound, no sweep
-    ld a, %11000110
-    ld [rNR14], a
+        ; --------------------------------------
+        ; Loop frequencies downward
+        ; --------------------------------------
+        ld   hl, StartFreq
 
-    ret
+FreqLoop:
+        ld   a, [hl]           ; low byte
+        ld   [rNR13], a
+        inc  hl
+        ld   a, [hl]           ; high byte (trigger bit set later)
+        or   %10000000         ; set initial trigger bit
+        ld   [rNR14], a
+        inc  hl
+
+        call DelayLong         ; wait for audible duration
+
+        ; Check end of table
+        ld   a, [hl]
+        cp   $FF
+        jr   nz, FreqLoop
+
+        ret
+
+; --------------------------------------
+; A long delay (software loop)
+; --------------------------------------
+DelayLong:
+        ld   bc, $5000        ; adjust for longer/shorter effect
+DelayLoop:
+        dec  bc
+        ld   a, b
+        or   c
+        jr   nz, DelayLoop
+        ret
+
+
+; --------------------------------------
+; Large frequency table (descending)
+; Each entry: low_byte, high_byte
+; Final marker: FF
+; --------------------------------------
+StartFreq:
+        db  $00, $07
+        db  $40, $06
+        db  $80, $05
+        db  $C0, $04
+        db  $00, $04
+        db  $40, $03
+        db  $80, $02
+        db  $C0, $01
+        db  $00, $01
+        db  $40, $00
+        db  $FF
+
 
 SECTION "Input Variables", WRAM0
         wCurKeys: db
