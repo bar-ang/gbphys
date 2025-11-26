@@ -117,7 +117,6 @@ Init:
 
 	; sound control
 	call InitSound
-	call PlayBeep
 	
 Process:
 	call WaitVBlank
@@ -371,6 +370,7 @@ StartFalling:
 	ret
 
 changeStateJUMP:
+	call PlayBeep
 	ld a, MOVE_STATE_JUMP
 	ld [wMoveState], a
 	ld a, PLAYER_JUMP
