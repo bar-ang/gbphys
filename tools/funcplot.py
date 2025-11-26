@@ -10,13 +10,26 @@ def func(x, t, m):
 
 def main(t, m):
     f = partial(func, t=t, m=m)
-    rounds = [round(f(x+1)) - round(f(x)) for x in range(t+1)]
-    unsigned = [x & 0xff for x in rounds][::-1]
-    hexs = [f"${t:02X}" for t in unsigned]
-    chunks = [hexs[i:i+ROW_LEN] for i in range(0, len(hexs), ROW_LEN)]
-    rows = ["JumpFunc:"]
-    for chunk in chunks:
-        rows.append("db " + ",".join(chunk))
+    rounds = [round(f(x+1)) - round(f(x)) for x in range(2*t+1)]
+    devs = [rounds[:t//2], rounds[t//2:t], rounds[t:]]
+
+    # import pdb; pdb.set_trace()
+    rows = []
+    for i, roundl in enumerate(devs):
+        unsigned = [x & 0xff for x in roundl]
+        hexs = [f"${t:02X}" for t in unsigned]
+        chunks = [hexs[i:i+ROW_LEN] for i in range(0, len(hexs), ROW_LEN)]
+
+        if i == 0:
+            rows.append("JumpFunc:")
+        elif i == 1:
+            rows.append(".maximum:")
+        elif i == 2:
+            rows.append(".equalibrium:")
+        else:
+            rows.append(f".segments_{i+1}")
+        for chunk in chunks:
+            rows.append("db " + ",".join(chunk))
     rows.append("EndJumpFunc:")
 
         
