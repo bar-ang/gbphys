@@ -1,6 +1,6 @@
 SECTION "Pseudo Math", ROM0
 
-PseudoParabola:
+PseudoParabola: ;Num Frames: 180
 db $01, $02, $01, $01, $02, $01, $01, $01
 db $02, $01, $01, $01, $01, $01, $01, $01
 db $01, $00, $01, $01, $01, $01, $00, $01
@@ -27,4 +27,4 @@ db $FD, $FC, $FD, $FC, $FD, $FC, $FC, $FD
 db $FC, $FC, $FC, $FD, $FC, $FC, $FC, $FC
 db $FC, $FC, $FC, $FC, $FC, $FC, $FC, $FB
 db $FC, $FC, $FC
-EndPseudoParabola:
+EndPseudoParabola: ;Num Frames: 180
