@@ -5,6 +5,8 @@ from PIL import Image
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 
+LABEL = "PlayerTiles"
+
 def kmeans_reduce_colors(img_path, K):
     # Load image
     img = Image.open(img_path).convert("RGB")
@@ -99,11 +101,10 @@ def main():
 
     tiles_str = blocks_to_tiles(arranged) 
 
-    with open("object.asm", "w") as f:
-        f.write("SECTION \"Object\", ROM0\n")
-        f.write("\nObject:\n")
+    with open("assets/player.asm", "w") as f:
+        f.write(f"\n{LABEL}:\n")
         f.write("\n".join([f"db {t}" for t in tiles_str]))
-        f.write("\nEndObject:\n")
+        f.write(f"\nEnd{LABEL}:\n")
 
     glued = concat_blocks(arranged, margin=0)
     plt.imshow(glued)
