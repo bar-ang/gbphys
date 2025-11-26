@@ -9,8 +9,7 @@ DEF SPAWN_X    EQU $40
 DEF SPAWN_Y    EQU $d0
 
 DEF MOVE_STATE_REST EQU 0
-DEF MOVE_STATE_FALL EQU 1
-DEF MOVE_STATE_JUMP EQU 2
+DEF MOVE_STATE_JUMP EQU 1
 
 DEF O_Y     EQU 0
 DEF O_X     EQU 1
@@ -90,7 +89,7 @@ Init:
 
 	call InitKeys
 
-	call changeStateFALL
+	call StartFalling
 
 	;moving the screen to bottom-left corner
 	ld a, 0
@@ -107,17 +106,15 @@ Process:
 	ld a, [wMoveState]
 	cp MOVE_STATE_REST
 	jp z, .rest
-	cp MOVE_STATE_FALL
-	jp z, .jump
 	cp MOVE_STATE_JUMP
 	jp z, .jump
 	jp .post_switch ; default
 
 	.rest:
-		; if there's no floor below, change to FALL
+		; if there's no floor below, fall
 		call TestFloorCollision
 		jp z, .post_switch
-		call changeStateFALL
+		call StartFalling
 		jp .post_switch
 	.jump:
 		ld a, [wJumper]
@@ -302,7 +299,7 @@ changeStateREST:
 	ld [Player + O_TILE], a
 	ret
 
-changeStateFALL:
+StartFalling:
 	ld a, MOVE_STATE_JUMP
 	ld [wMoveState], a
 	ld a, PLAYER_JUMP
