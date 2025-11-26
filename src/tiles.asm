@@ -12,6 +12,14 @@ SECTION "Tile data", ROM0
 
 Objects:
 INCLUDE "assets/player.asm"
+        dw `11000001
+        dw `01100001
+        dw `00112211
+        dw `00222210
+        dw `00223220
+        dw `01122220
+        dw `11000110
+        dw `10000011
 EndObjects:
 
 Tiles:
