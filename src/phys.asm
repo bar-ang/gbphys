@@ -121,9 +121,9 @@ Process:
 		jp .post_switch
 	.jump:
 		ld a, [wJumper]
-		dec a
+		inc a
 		ld [wJumper], a
-		cp a, 0
+		cp a, EndJumpFunc - JumpFunc - 1
 		jp nz, .cont
 		call changeStateREST
 		jp .post_switch
@@ -141,8 +141,8 @@ Process:
 		ld [Player + O_Y], a
 
 		ld a, c; note that c == [wJumper]
-		cp a, 45
-		jp c, .hit_ground_test
+		cp a, JumpFunc.maximum - JumpFunc
+		jp nc, .hit_ground_test
 		jp .post_switch
 	.fall:
 		; obj fall down
@@ -323,7 +323,7 @@ changeStateJUMP:
 	ld [wMoveState], a
 	ld a, PLAYER_JUMP
 	ld [Player + O_TILE], a
-	ld a, JUMP_DURATION + 1
+	ld a, 0
 	ld [wJumper], a
 	ret
 
