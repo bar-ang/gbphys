@@ -79,7 +79,7 @@ PlayBeep:
         ; --------------------------------------
         ; Loop frequencies downward
         ; --------------------------------------
-        ld   hl, StartFreq
+        ld   hl, BGMusicFreq
 
 FreqLoop:
         ld   a, [hl]           ; low byte
@@ -117,18 +117,54 @@ DelayLoop:
 ; Each entry: low_byte, high_byte
 ; Final marker: FF
 ; --------------------------------------
-StartFreq:
-        db  $00, $07
-        db  $40, $06
-        db  $80, $05
-        db  $C0, $04
-        db  $00, $04
-        db  $40, $03
-        db  $80, $02
-        db  $C0, $01
-        db  $00, $01
-        db  $40, $00
-        db  $FF
+BGMusicFreq:
+        ; --- Bar 1: Cheerful opening ---
+        db $AE, $02   ; C4
+        db $D6, $02   ; E4
+        db $00, $03   ; G4
+        db $37, $03   ; C5
+
+        db $00, $03   ; G4
+        db $D6, $02   ; E4
+        db $AE, $02   ; C4
+        db $D6, $02   ; E4
+
+        ; --- Bar 2: Bounce upward ---
+        db $00, $03   ; G4
+        db $2B, $03   ; B4
+        db $37, $03   ; C5
+        db $50, $03   ; D5
+
+        db $37, $03   ; C5
+        db $2B, $03   ; B4
+        db $00, $03   ; G4
+        db $D6, $02   ; E4
+
+        ; --- Bar 3: Bright repeat ---
+        db $AE, $02   ; C4
+        db $D6, $02   ; E4
+        db $00, $03   ; G4
+        db $37, $03   ; C5
+
+        db $50, $03   ; D5
+        db $37, $03   ; C5
+        db $2B, $03   ; B4
+        db $00, $03   ; G4
+
+        ; --- Bar 4: Cute ending / loop ---
+        db $D6, $02   ; E4
+        db $AE, $02   ; C4
+        db $D6, $02   ; E4
+        db $00, $03   ; G4
+
+        db $AE, $02   ; C4
+        db $AE, $02   ; C4
+        db $AE, $02   ; C4
+        db $AE, $02   ; C4   ; little hold at end
+
+        ; Loop marker
+        db $FF
+
 
 
 SECTION "Input Variables", WRAM0
