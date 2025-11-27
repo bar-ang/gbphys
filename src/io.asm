@@ -54,7 +54,7 @@ InitSound:
         ld [rNR50], a
 
         ; Enable Channel 1 to both outputs
-        ld a, %00000001
+        ld a, %00010001
         ld [rNR51], a
 
         ret
