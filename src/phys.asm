@@ -124,6 +124,12 @@ Process:
 	inc a
 	ld [wFrame], a
 
+	and a, 0xf ; a == [wFrame]
+	cp a, 0
+	jp nz, .no_music
+	call BGMusicStep
+	.no_music:
+
 	ld a, [wMoveState]
 	cp MOVE_STATE_REST
 	jp z, .rest
