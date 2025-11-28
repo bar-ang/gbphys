@@ -110,49 +110,18 @@ BGMusicStep:
 ; Final marker: FF
 ; --------------------------------------
 BGMusicFreq:
-        ; --- Bar 1: Cheerful opening ---
-        db $AE, $02   ; C4
-        db $D6, $02   ; E4
-        db $00, $03   ; G4
-        db $37, $03   ; C5
+        dw 0x300, 0x355, 0x380, 0x355,   ; C–D–E–D
+        dw 0x300, 0x300, 0x200,          ; C–C–G (down)
 
-        db $00, $03   ; G4
-        db $D6, $02   ; E4
-        db $AE, $02   ; C4
-        db $D6, $02   ; E4
+        dw 0x300, 0x355, 0x380, 0x355,   ; C–D–E–D
+        dw 0x300, 0x380, 0x300,          ; C–E–C
 
-        ; --- Bar 2: Bounce upward ---
-        db $00, $03   ; G4
-        db $2B, $03   ; B4
-        db $37, $03   ; C5
-        db $50, $03   ; D5
+        dw 0x380, 0x399, 0x3B0, 0x399,   ; E–F–G–F
+        dw 0x380, 0x380, 0x300,          ; E–E–C
 
-        db $37, $03   ; C5
-        db $2B, $03   ; B4
-        db $00, $03   ; G4
-        db $D6, $02   ; E4
+        dw 0x355, 0x380, 0x355, 0x300,   ; D–E–D–C
+        dw 0x380, 0x300, 0x200           ; E–C–G (ending)
 
-        ; --- Bar 3: Bright repeat ---
-        db $AE, $02   ; C4
-        db $D6, $02   ; E4
-        db $00, $03   ; G4
-        db $37, $03   ; C5
-
-        db $50, $03   ; D5
-        db $37, $03   ; C5
-        db $2B, $03   ; B4
-        db $00, $03   ; G4
-
-        ; --- Bar 4: Cute ending / loop ---
-        db $D6, $02   ; E4
-        db $AE, $02   ; C4
-        db $D6, $02   ; E4
-        db $00, $03   ; G4
-
-        db $AE, $02   ; C4
-        db $AE, $02   ; C4
-        db $AE, $02   ; C4
-        db $AE, $02   ; C4   ; little hold at end
 BGMusicFreqEnd:
 
 
