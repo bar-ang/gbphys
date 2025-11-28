@@ -57,13 +57,6 @@ InitSound:
         ld a, %00010001
         ld [rNR51], a
 
-        ; Clear music variables
-        ld a, 0
-        ld [wBGMusicPos], a
-
-        ret
-
-BGMusicStep:
         ; --------------------------------------
         ; Configure Channel 1 registers
         ; --------------------------------------
@@ -80,6 +73,13 @@ BGMusicStep:
         ld   a, %11110111      ; initial=15, decay, sweep=7
         ld   [rNR12], a
 
+        ; Clear music variables
+        ld a, 0
+        ld [wBGMusicPos], a
+
+        ret
+
+BGMusicStep:
         ; --------------------------------------
         ; Loop frequencies downward
         ; --------------------------------------
