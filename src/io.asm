@@ -63,59 +63,6 @@ InitSound:
 
         ret
 
-PlayBeep:
-        ; --------------------------------------
-        ; Configure Channel 1 registers
-        ; --------------------------------------
-
-        ; NR10 – Sweep (slow downward sweep)
-        ld   a, %01100111      ; period=3, decrease, shift=7
-        ld   [rNR10], a
-
-        ; NR11 – Duty + length (high volume, 50% duty)
-        ld   a, %01000000      ; duty=01 (50%), length=0
-        ld   [rNR11], a
-
-        ; NR12 – Envelope: start loud, fade slowly
-        ld   a, %11110111      ; initial=15, decay, sweep=7
-        ld   [rNR12], a
-
-        ; --------------------------------------
-        ; Loop frequencies downward
-        ; --------------------------------------
-        ld   hl, BGMusicFreq
-
-FreqLoop:
-        ld   a, [hl]           ; low byte
-        ld   [rNR13], a
-        inc  hl
-        ld   a, [hl]           ; high byte (trigger bit set later)
-        or   %10000000         ; set initial trigger bit
-        ld   [rNR14], a
-        inc  hl
-
-        call DelayLong         ; wait for audible duration
-
-        ; Check end of table
-        ld   a, [hl]
-        cp   $FF
-        jr   nz, FreqLoop
-
-        ret
-
-; --------------------------------------
-; A long delay (software loop)
-; --------------------------------------
-DelayLong:
-        ld   bc, $5000        ; adjust for longer/shorter effect
-DelayLoop:
-        dec  bc
-        ld   a, b
-        or   c
-        jr   nz, DelayLoop
-        ret
-
-
 BGMusicStep:
         ; --------------------------------------
         ; Configure Channel 1 registers
