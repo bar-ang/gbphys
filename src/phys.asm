@@ -127,9 +127,9 @@ Process:
 		call StartFalling
 		jp .post_switch
 	.jump:
-		ld a, [wJumper]
+		ld a, [wParabolaPos]
 		inc a
-		ld [wJumper], a
+		ld [wParabolaPos], a
 		cp a, EndPseudoParabola - PseudoParabola - 1
 		jp nz, .cont_jump
 		call changeStateREST
@@ -137,7 +137,7 @@ Process:
 		
 		.cont_jump:
 		ld hl, PseudoParabola
-		ld a, [wJumper]
+		ld a, [wParabolaPos]
 		ld c, a
 		ld b, 0
 		add hl, bc
@@ -147,7 +147,7 @@ Process:
 		sub a, b
 		ld [Player + O_Y], a
 
-		ld a, c; note that c == [wJumper]
+		ld a, c; note that c == [wParabolaPos]
 		cp a, PseudoParabola.maximum - PseudoParabola
 		jp nc, .hit_ground_test
 		jp .post_switch
@@ -315,7 +315,7 @@ StartFalling:
 	ld a, PLAYER_JUMP
 	ld [Player + O_TILE], a
 	ld a, PseudoParabola.maximum - PseudoParabola + 4
-	ld [wJumper], a
+	ld [wParabolaPos], a
 	ret
 
 changeStateJUMP:
@@ -324,7 +324,7 @@ changeStateJUMP:
 	ld a, PLAYER_JUMP
 	ld [Player + O_TILE], a
 	ld a, 0
-	ld [wJumper], a
+	ld [wParabolaPos], a
 	ret
 
 UpdateOAM:
@@ -479,7 +479,6 @@ PlayerTranslate:
 SECTION "Attributes", WRAM0
 	Player: ds 4
 	Enemies: ds (EndEnemiesSpawnData - EnemiesSpawnData)
-	wJumper: db
 
 	; 0 - rest
 	; 1 - fall
