@@ -71,8 +71,3 @@ db $01, $00, $00, $00, $00, $01, $00, $00
 db $00, $00, $00, $00
 EndPseudoCosine:
 
-
-SECTION "Pseudo Math Location Pointers", WRAM0
-	wParabolaPos:	ds 1 ; place holder for ptr to PseudoParabola
-	wSinePos:	ds 1 ; place holder for ptr to PseudoSine
-	wCosinePos:	ds 1 ; place holder for ptr to PseudoCosine

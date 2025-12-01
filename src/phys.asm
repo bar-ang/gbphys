@@ -517,6 +517,8 @@ PlayerTranslate:
 SECTION "Attributes", WRAM0
 	Player: ds 4
 	Enemies: ds (EndEnemiesSpawnData - EnemiesSpawnData)
+	wParabolaPos: db
+	wSinePos: db
 
 	; 0 - rest
 	; 1 - fall
