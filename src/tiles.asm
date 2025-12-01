@@ -3,6 +3,13 @@ DEF BG_VRAM     EQU 0
 DEF FLOOR_VRAM  EQU 1
 DEF WALL_VRAM   EQU 2
 
+DEF ENEMY_ORAM  EQU $10
+; Spawn data positions
+; e.g: enemy's Y position is set in [EnemySpawnData + SP_Y]
+DEF SP_Y     EQU 0
+DEF SP_X     EQU 1
+DEF SP_TILE  EQU 2
+
 DEF PLAYER_WALK EQU 0 ; alternating between 0, 1
 DEF PLAYER_REST EQU 2
 DEF PLAYER_JUMP EQU 3
@@ -70,3 +77,12 @@ SECTION "Tilemap", ROM0
 TileMap:
         INCBIN "assets/tilemap.2bpp"
 EndTileMap:
+
+SECTION "Data", ROM0
+EnemiesSpawnData:
+; each enemy has 3 bytes:
+; y pos, x pos (wordly, not on screen), type (tile ID)
+        db $df, $40, ENEMY_ORAM
+.single: ; used to calcute the size of each enemy
+        db $c1, $10, ENEMY_ORAM
+EndEnemiesSpawnData:
