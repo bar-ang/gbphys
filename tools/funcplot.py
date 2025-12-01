@@ -19,7 +19,7 @@ def cosine(x, t, m):
 
 def burn_func(file, func, name, to, fromm=0, labels={}):
     name = name.capitalize()
-    rounds = [round(func(x+1)) - round(func(x)) for x in range(fromm, to+1)]
+    rounds = [round(func(x+1)) - round(func(x)) for x in range(fromm, to)]
     rows = [f"Pseudo{name}: ;Num Frames: {to - fromm}"]
 
     accum = []
