@@ -72,15 +72,24 @@ Init:
 	ld [Player + O_FLAGS], a
 
 	;spawn enemies
-	; TODO: ONLY FIRST ENEMY SPAWNS!
-	ld a, [EnemiesSpawnData + SP_X]
-	ld [Enemies + O_X], a
-	ld a, [EnemiesSpawnData + SP_Y]
-	ld [Enemies + O_Y], a
-	ld a, [EnemiesSpawnData + SP_TILE]
-	ld [Enemies + O_TILE], a
-	ld a, 0
-	ld [Enemies + O_FLAGS], a
+	ld b, NUM_ENEMIES
+	ld hl, EnemiesSpawnData
+	ld de, Enemies
+	.loop_spawn_enemies:
+		REPT 3
+		ld a, [hli]
+		ld [de], a
+		inc de
+		ENDR
+		
+		xor a, a
+		ld [hli], a
+		inc de
+
+		dec b
+		ld a, b
+		cp a, 0
+		jp nz, .loop_spawn_enemies
 
 	; Turn the LCD on
 	ld a, LCDCF_ON | LCDCF_BGON | LCDCF_OBJON | LCDCF_WINON | LCDCF_WIN9C00

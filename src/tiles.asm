@@ -6,6 +6,8 @@ DEF WALL_VRAM   EQU 2
 DEF ENEMY_ORAM  EQU $10
 ; Spawn data positions
 ; e.g: enemy's Y position is set in [EnemySpawnData + SP_Y]
+; IMPORTANT: ORDER MATTERS A LOT! it must match
+;     the order in EnemiesSpawnData!
 DEF SP_Y     EQU 0
 DEF SP_X     EQU 1
 DEF SP_TILE  EQU 2
