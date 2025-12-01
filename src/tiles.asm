@@ -79,10 +79,14 @@ TileMap:
 EndTileMap:
 
 SECTION "Data", ROM0
+
+DEF NUM_ENEMIES EQU 3
+
 EnemiesSpawnData:
 ; each enemy has 3 bytes:
 ; y pos, x pos (wordly, not on screen), type (tile ID)
         db $df, $40, ENEMY_ORAM
 .single: ; used to calcute the size of each enemy
         db $c1, $10, ENEMY_ORAM
+        db $df, $10, ENEMY_ORAM
 EndEnemiesSpawnData:
