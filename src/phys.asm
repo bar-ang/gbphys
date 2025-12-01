@@ -164,6 +164,41 @@ Process:
 		
 		jp .post_switch
 	.post_switch:
+
+	; making the enemies move
+
+	; move on X axis
+	ld a, [wSinePos]
+	ld hl, PseudoSine
+	ld c, a
+	ld b, 0
+	add hl, bc
+	ld a, [hl]
+	ld b, a
+	ld a, [Enemies + O_X]
+	add a, b
+	ld [Enemies + O_X], a
+
+	; move on Y axis
+	ld a, [wSinePos]
+	ld hl, PseudoCosine
+	ld c, a
+	ld b, 0
+	add hl, bc
+	ld a, [hl]
+	ld b, a
+	ld a, [Enemies + O_Y]
+	add a, b
+	ld [Enemies + O_Y], a
+
+	ld a, [wSinePos]
+	inc a
+	cp a, EndPseudoSine - PseudoSine
+	jp nz, .no_reset_sin
+	xor a, a
+	.no_reset_sin:
+	ld [wSinePos], a
+
 	; handle keyboard input
 	call UpdateKeys
 
