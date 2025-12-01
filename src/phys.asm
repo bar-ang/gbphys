@@ -70,7 +70,17 @@ Init:
 	ld a, 0
 	ld [Player + O_TILE], a
 	ld [Player + O_FLAGS], a
-	
+
+	;spawn enemies
+	; TODO: ONLY FIRST ENEMY SPAWNS!
+	ld a, [EnemiesSpawnData + SP_X]
+	ld [Enemies + O_X], a
+	ld a, [EnemiesSpawnData + SP_Y]
+	ld [Enemies + O_Y], a
+	ld a, [EnemiesSpawnData + SP_TILE]
+	ld [Enemies + O_TILE], a
+	ld a, 0
+	ld [Enemies + O_FLAGS], a
 
 	; Turn the LCD on
 	ld a, LCDCF_ON | LCDCF_BGON | LCDCF_OBJON | LCDCF_WINON | LCDCF_WIN9C00
@@ -433,6 +443,27 @@ UpdateOAM:
 	;Flags
 	ld a, [Player + O_FLAGS]
 	ld [hli], a
+
+; ~~~~~ UPDATE ENEMIES OAM: ~~~~~~~
+	; TODO: ONLY FIRST ENEMY!
+	ld hl, _OAMRAM + 16
+	ld a, [rSCY]
+	ld b, a
+	ld a, [Enemies + O_Y]
+	add a, Y_OFFSET
+	sub a, b
+	ld [hli], a
+
+	ld a, [rSCX]
+	ld b, a
+	ld a, [Enemies + O_X]
+	add a, X_OFFSET
+	sub a, b
+	ld [hli], a
+	ld a, [Enemies + O_TILE]
+	ld [hli], a
+	ld a, [Enemies + O_FLAGS]
+	ld [hli], a
 	
 	ret
 
@@ -447,6 +478,7 @@ PlayerTranslate:
 
 SECTION "Attributes", WRAM0
 	Player: ds 4
+	Enemies: ds (EndEnemiesSpawnData - EnemiesSpawnData)
 	wJumper: db
 
 	; 0 - rest
