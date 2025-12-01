@@ -493,25 +493,29 @@ UpdateOAM:
 
 ; ~~~~~ UPDATE ENEMIES OAM: ~~~~~~~
 	; TODO: ONLY FIRST ENEMY!
-	ld hl, _OAMRAM + 16
-	ld a, [rSCY]
-	ld b, a
-	ld a, [Enemies + O_Y]
-	add a, Y_OFFSET
-	sub a, b
-	ld [hli], a
+	DEF i = 0
+	REPT NUM_ENEMIES
+		ld hl, _OAMRAM + 16 + 4 * i
+		ld a, [rSCY]
+		ld b, a
+		ld a, [Enemies + 4 * i + O_Y]
+		add a, Y_OFFSET
+		sub a, b
+		ld [hli], a
 
-	ld a, [rSCX]
-	ld b, a
-	ld a, [Enemies + O_X]
-	add a, X_OFFSET
-	sub a, b
-	ld [hli], a
-	ld a, [Enemies + O_TILE]
-	ld [hli], a
-	ld a, [Enemies + O_FLAGS]
-	ld [hli], a
-	
+		ld a, [rSCX]
+		ld b, a
+		ld a, [Enemies + 4 * i + O_X]
+		add a, X_OFFSET
+		sub a, b
+		ld [hli], a
+		ld a, [Enemies + 4 * i + O_TILE]
+		ld [hli], a
+		ld a, [Enemies + + 4 * i + O_FLAGS]
+		ld [hli], a
+
+		DEF i += 1
+	ENDR
 	ret
 
 PlayerTranslate:
