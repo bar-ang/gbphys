@@ -106,6 +106,9 @@ Init:
 	ld [rSCX], a
 	ld a, 111
 	ld [rSCY], a
+
+	ld a, 0
+	ld [wSinePos], a
 	
 Process:
 	call WaitVBlank

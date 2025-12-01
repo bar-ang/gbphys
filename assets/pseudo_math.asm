@@ -26,7 +26,7 @@ db $FD, $FC, $FD, $FD, $FC, $FD, $FD, $FC
 db $FD, $FC, $FD, $FC, $FD, $FC, $FC, $FD
 db $FC, $FC, $FC, $FD, $FC, $FC, $FC, $FC
 db $FC, $FC, $FC, $FC, $FC, $FC, $FC, $FB
-db $FC, $FC, $FC
+db $FC, $FC
 EndPseudoParabola:
 
 PseudoSine: ;Num Frames: 140
@@ -47,7 +47,7 @@ db $00, $00, $00, $00, $00, $00, $00, $01
 db $00, $00, $00, $00, $01, $00, $00, $01
 db $00, $00, $01, $00, $01, $00, $00, $01
 db $00, $01, $00, $01, $00, $01, $00, $01
-db $00, $01, $00, $01, $01
+db $00, $01, $00, $01
 EndPseudoSine:
 
 PseudoCosine: ;Num Frames: 140
@@ -68,7 +68,7 @@ db $01, $01, $00, $01, $00, $01, $00, $01
 db $00, $01, $00, $01, $00, $01, $00, $00
 db $01, $00, $01, $00, $00, $01, $00, $00
 db $01, $00, $00, $00, $00, $01, $00, $00
-db $00, $00, $00, $00, $00
+db $00, $00, $00, $00
 EndPseudoCosine:
 
 
