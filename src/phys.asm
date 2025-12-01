@@ -108,7 +108,7 @@ Init:
 	ld [rSCY], a
 
 	ld a, 0
-	ld [wSinePos], a
+	ld [wEnemyMath], a
 	
 Process:
 	call WaitVBlank
@@ -168,7 +168,7 @@ Process:
 	; making the enemies move
 
 	; move on X axis
-	ld a, [wSinePos]
+	ld a, [wEnemyMath]
 	ld hl, PseudoSine
 	ld c, a
 	ld b, 0
@@ -180,7 +180,7 @@ Process:
 	ld [Enemies + O_X], a
 
 	; move on Y axis
-	ld a, [wSinePos]
+	ld a, [wEnemyMath]
 	ld hl, PseudoCosine
 	ld c, a
 	ld b, 0
@@ -191,13 +191,13 @@ Process:
 	add a, b
 	ld [Enemies + O_Y], a
 
-	ld a, [wSinePos]
+	ld a, [wEnemyMath]
 	inc a
 	cp a, EndPseudoSine - PseudoSine
 	jp nz, .no_reset_sin
 	xor a, a
 	.no_reset_sin:
-	ld [wSinePos], a
+	ld [wEnemyMath], a
 
 	; handle keyboard input
 	call UpdateKeys
@@ -518,7 +518,7 @@ SECTION "Attributes", WRAM0
 	Player: ds 4
 	Enemies: ds (EndEnemiesSpawnData - EnemiesSpawnData)
 	wParabolaPos: db
-	wSinePos: db
+	wEnemyMath: db
 
 	; 0 - rest
 	; 1 - fall
