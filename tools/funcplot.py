@@ -37,8 +37,8 @@ def burn_func(file, func, name, to, fromm=0, labels={}):
 
 def main():
     parabola0 = partial(parabola, t=JUMP_TIME, m=JUMP_HEIGHT)
-    sine0 = partial(sine, t=140, m=12)
-    cosine0 = partial(cosine, t=140, m=12)
+    sine0 = partial(sine, t=140, m=22)
+    cosine0 = partial(cosine, t=140, m=22)
     
     with open(FILE, "w") as f:
         f.write("SECTION \"Pseudo Math\", ROM0\n\n")
