@@ -535,8 +535,7 @@ SECTION "Attributes", WRAM0
 	wEnemyMath: db
 
 	; 0 - rest
-	; 1 - fall
-	; 2 - jump
+	; 1 - jump
 	wMoveState: db
 
 SECTION "Counter", WRAM0
