@@ -10,6 +10,7 @@ DEF SPAWN_Y    EQU $d0
 
 DEF MOVE_STATE_REST EQU 0
 DEF MOVE_STATE_JUMP EQU 1
+DEF MOVE_STATE_DEAD EQU 2
 
 DEF O_Y     EQU 0
 DEF O_X     EQU 1
@@ -212,6 +213,10 @@ Process:
 	; handle keyboard input
 	call UpdateKeys
 
+	ld a, [wMoveState]
+	cp a, MOVE_STATE_DEAD
+	jp z, .post_animate
+
 	; Left
 	ld a, [wCurKeys]
 	and a, PADF_LEFT
@@ -375,6 +380,17 @@ changeStateJUMP:
 	ld [wJumpMath], a
 	ret
 
+changeStateDEAD:
+	ld a, MOVE_STATE_DEAD
+	ld [wMoveState], a
+	ld a, PLAYER_WALK
+	ld [Player + O_TILE], a
+	ld a, [Player + O_FLAGS]
+	or a, $40
+	ld [Player + O_FLAGS], a
+	ret
+
+
 UpdateOAM:
 ; TODO: a macro for preventing code dup would be nice.
 
@@ -536,6 +552,7 @@ SECTION "Attributes", WRAM0
 
 	; 0 - rest
 	; 1 - jump
+	; 2 - dead
 	wMoveState: db
 
 SECTION "Counter", WRAM0
