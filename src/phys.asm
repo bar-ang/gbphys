@@ -507,7 +507,7 @@ UpdateOAM:
 		ld [hli], a
 		ld a, [Enemies + 4 * i + O_TILE]
 		ld [hli], a
-		ld a, [Enemies + + 4 * i + O_FLAGS]
+		ld a, [Enemies + 4 * i + O_FLAGS]
 		ld [hli], a
 
 		DEF i += 1
