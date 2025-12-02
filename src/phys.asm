@@ -173,35 +173,40 @@ Process:
 	; making the enemies move
 
 	; move on X axis
-	ld a, [wEnemyMath]
-	ld hl, PseudoSine
-	ld c, a
-	ld b, 0
-	add hl, bc
-	ld a, [hl]
-	ld b, a
-	ld a, [Enemies + O_X]
-	add a, b
-	ld [Enemies + O_X], a
+	DEF i = 0
+	REPT NUM_ENEMIES
+		ld a, [wEnemyMath]
+		ld hl, PseudoSine
+		ld c, a
+		ld b, 0
+		add hl, bc
+		ld a, [hl]
+		ld b, a
+		ld a, [Enemies + 4 * i + O_X]
+		add a, b
+		ld [Enemies + 4 * i + O_X], a
 
-	; move on Y axis
-	ld a, [wEnemyMath]
-	ld hl, PseudoCosine
-	ld c, a
-	ld b, 0
-	add hl, bc
-	ld a, [hl]
-	ld b, a
-	ld a, [Enemies + O_Y]
-	add a, b
-	ld [Enemies + O_Y], a
+		; move on Y axis
+		ld a, [wEnemyMath]
+		ld hl, PseudoCosine
+		ld c, a
+		ld b, 0
+		add hl, bc
+		ld a, [hl]
+		ld b, a
+		ld a, [Enemies + 4 * i + O_Y]
+		add a, b
+		ld [Enemies + 4 * i + O_Y], a
+
+		DEF i += 1
+	ENDR
 
 	ld a, [wEnemyMath]
 	inc a
 	cp a, EndPseudoSine - PseudoSine
-	jp nz, .no_reset_sin
+	jp nz, .no_reset_enemy_move
 	xor a, a
-	.no_reset_sin:
+	.no_reset_enemy_move:
 	ld [wEnemyMath], a
 
 	; handle keyboard input
