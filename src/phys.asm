@@ -76,16 +76,12 @@ Init:
 	ld hl, EnemiesSpawnData
 	ld de, Enemies
 	.loop_spawn_enemies:
-		REPT 3
+		REPT 4
 		ld a, [hli]
 		ld [de], a
 		inc de
 		ENDR
 		
-		xor a, a
-		ld [hli], a
-		inc de
-
 		dec b
 		ld a, b
 		cp a, 0
