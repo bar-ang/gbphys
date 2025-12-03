@@ -210,6 +210,12 @@ Process:
 	.no_reset_enemy_move:
 	ld [wEnemyMath], a
 
+	call TestEnemyCollision
+	cp a, $ff
+	jp z, .still_alive
+	call changeStateDEAD
+	.still_alive:
+	
 	; handle keyboard input
 	call UpdateKeys
 
