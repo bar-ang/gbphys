@@ -318,6 +318,46 @@ adjustScreenPos:
 	ld [rSCY], a
 	ret
 
+; @return: set in A the enemy address (with 'Enemies' subtracted to save 1 byte)
+;      if no collision then set: A=$ff
+TestEnemyCollision:
+	DEF i = 0
+	REPT NUM_ENEMIES
+		; NOTE: enemy size: 8x8, player size: 16x16
+		ld a, [Enemies + 4*i + O_X]
+		ld b, a
+		ld a, [Player + O_X]
+
+		add a, 8 + 4
+		cp a, b
+		jp c, .no_collision\@
+
+		sub a, 16 + 4
+		cp a, b
+		jp nc, .no_collision\@
+
+		ld a, [Enemies + 4*i + O_Y]
+		ld b, a
+		ld a, [Player + O_Y]
+
+		add a, 8 - 8
+		cp a, b
+		jp c, .no_collision\@
+
+		sub a, 16
+		cp a, b
+		jp nc, .no_collision\@
+
+		ld a, 4*i
+		ret
+		
+		.no_collision\@:
+		DEF i+=1
+	ENDR
+
+	ld a, $ff
+	ret
+
 TestFloorCollision:
 	ld hl, Player
 	ld a, [Player + O_X]
