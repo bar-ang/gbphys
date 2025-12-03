@@ -87,7 +87,7 @@ DEF NUM_ENEMIES EQU 3
 EnemiesSpawnData:
 ; each enemy has 3 bytes:
 ; y pos, x pos (wordly, not on screen), type (tile ID), flags
-        db $df, $40, ENEMY_ORAM, 0
+        db $bf, $90, ENEMY_ORAM, 0
 .single: ; used to calcute the size of each enemy
         db $c1, $11, ENEMY_ORAM, 0
         db $df, $15, ENEMY_ORAM, 0
