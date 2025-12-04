@@ -327,60 +327,33 @@ adjustScreenPos:
 ; @return: set in A the enemy address (with 'Enemies' subtracted to save 1 byte)
 ;      if no collision then set: A=$ff
 TestEnemyCollision:
-	DEF i=0
+	DEF i = 0
 	REPT NUM_ENEMIES
 		; NOTE: enemy size: 8x8, player size: 16x16
-		ld a, [Player + O_X]
-		ld b, a
 		ld a, [Enemies + 4*i + O_X]
-		sub a, b
-
-		; we want to check if:
-		; -8 < a < 16 - this asserts that there's a collision
-
-		; if a < 16 - collision (on X axis)
-		cp a, 16
-		jp c, .check_y_collision\@
-
-		; so now either a >= 16 or a < 0
-		; if a is non-negative there's a collision for sure:
-		and a, 0x80 ; check the last bit of a (negative if the bit is on)
-		jp z, .check_y_collision\@
-		
-		
-		; now a < 0, so collision iff |a| < 8
-		cpl a
-		inc a ; using two's complement to calculate a := |a|
-		cp a, 8
-		jp nc, .no_collision\@
-
-		; now there's a collision on the X axis for sure
-		; check the Y axis in the same way:
-
-		.check_y_collision\@:
-		ld a, [Player + O_Y]
-		add a , 8 ; because this is the coord of the bottom left tile
 		ld b, a
-		ld a, [Enemies + 4*i + O_Y]
-		sub a, b
+		ld a, [Player + O_X]
 
-		; we want to check if:
-		; -8 < a < 16 - this asserts that there's a collision
-		; see comments for collision on X axis
-		; TODO: please avoid code dups!
+		add a, 8 + 4
+		cp a, b
+		jp c, .no_collision\@
 
-		cp a, 16
-		jp c, .inform_collision\@
-
-		and a, 0x80
-		jp z, .inform_collision\@
-		
-		cpl a
-		inc a
-		cp a, 8
+		sub a, 16 + 4
+		cp a, b
 		jp nc, .no_collision\@
 
-		.inform_collision\@:
+		ld a, [Enemies + 4*i + O_Y]
+		ld b, a
+		ld a, [Player + O_Y]
+
+		add a, 8 - 8
+		cp a, b
+		jp c, .no_collision\@
+
+		sub a, 16
+		cp a, b
+		jp nc, .no_collision\@
+
 		ld a, 4*i
 		ret
 		
