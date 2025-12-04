@@ -82,13 +82,14 @@ EndTileMap:
 
 SECTION "Data", ROM0
 
-DEF NUM_ENEMIES EQU 3
+DEF NUM_ENEMIES EQU 4
 
 EnemiesSpawnData:
 ; each enemy has 3 bytes:
 ; y pos, x pos (wordly, not on screen), type (tile ID), flags
         db $bf, $90, ENEMY_ORAM, 0
 .single: ; used to calcute the size of each enemy
-        db $c1, $11, ENEMY_ORAM, 0
-        db $df, $15, ENEMY_ORAM, 0
+        db $b7, $11, ENEMY_ORAM, 0
+        db $5f, $75, ENEMY_ORAM, 0
+        db $9f, $75, ENEMY_ORAM, 0
 EndEnemiesSpawnData:
