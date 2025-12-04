@@ -89,7 +89,7 @@ EnemiesSpawnData:
 ; y pos, x pos (wordly, not on screen), type (tile ID), flags
         db $bf, $90, ENEMY_ORAM, 0
 .single: ; used to calcute the size of each enemy
-        db $b7, $11, ENEMY_ORAM, 0
-        db $5f, $75, ENEMY_ORAM, 0
+        db $c1, $11, ENEMY_ORAM, 0
+        db $df, $65, ENEMY_ORAM, 0
         db $9f, $75, ENEMY_ORAM, 0
 EndEnemiesSpawnData:
