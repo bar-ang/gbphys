@@ -90,5 +90,5 @@ EnemiesSpawnData:
         db $df, $40, ENEMY_ORAM, 0
 .single: ; used to calcute the size of each enemy
         db $c1, $11, ENEMY_ORAM, 0
-        db $df, $15, ENEMY_ORAM, 0
+        db $df, $65, ENEMY_ORAM, 0
 EndEnemiesSpawnData:
