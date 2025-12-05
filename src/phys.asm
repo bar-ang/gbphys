@@ -17,6 +17,11 @@ DEF O_X     EQU 1
 DEF O_TILE  EQU 2
 DEF O_FLAGS EQU 3
 
+
+MACRO set_player
+	ld [Player + \1], a
+ENDM
+
 SECTION "Header", ROM0[$100]
 	jp Init
 	ds $150 - @, 0 ; Make room for the header
@@ -154,7 +159,7 @@ Process:
 		ld b, a
 		ld a, [Player + O_Y]
 		sub a, b
-		ld [Player + O_Y], a
+		set_player O_Y
 
 		ld a, c; note that c == [wJumpMath]
 		cp a, PseudoParabola.maximum - PseudoParabola
@@ -234,14 +239,14 @@ Process:
 	
 	ld a, [Player + O_X]
 	dec a
-	ld [Player + O_X], a
+	set_player O_X
 
 	ld a, [wNewKeys]
 	and a, PADF_LEFT
 	jp z, .post_left
 	ld a, [Player + O_FLAGS]
 	or a, 0x20
-	ld [Player + O_FLAGS], a
+	set_player O_FLAGS
 	.post_left:
 
 	; Right
@@ -255,14 +260,14 @@ Process:
 	
 	ld a, [Player + O_X]
 	inc a
-	ld [Player + O_X], a
+	set_player O_X
 	
 	ld a, [wNewKeys]
 	and a, PADF_RIGHT
 	jp z, .post_right
 	ld a, [Player + O_FLAGS]
 	and a, 0xDF
-	ld [Player + O_FLAGS], a
+	set_player O_FLAGS
 	.post_right:
 
 
@@ -288,7 +293,7 @@ Process:
 	jp nz, .post_animate
 	ld a, [Player + O_TILE]
 	xor a, 1
-	ld [Player + O_TILE], a
+	set_player O_TILE
 	.post_animate:
 
 	call adjustScreenPos
@@ -413,7 +418,7 @@ StartFalling:
 	ld a, MOVE_STATE_JUMP
 	ld [wMoveState], a
 	ld a, PLAYER_JUMP
-	ld [Player + O_TILE], a
+	set_player O_TILE
 	ld a, PseudoParabola.maximum - PseudoParabola + 4
 	ld [wJumpMath], a
 	ret
@@ -422,7 +427,7 @@ changeStateJUMP:
 	ld a, MOVE_STATE_JUMP
 	ld [wMoveState], a
 	ld a, PLAYER_JUMP
-	ld [Player + O_TILE], a
+	set_player O_TILE
 	ld a, 0
 	ld [wJumpMath], a
 	ret
@@ -434,7 +439,7 @@ changeStateDEAD:
 	ld [Player + O_TILE], a
 	ld a, [Player + O_FLAGS]
 	or a, $40
-	ld [Player + O_FLAGS], a
+	set_player O_FLAGS
 	ret
 
 
