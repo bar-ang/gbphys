@@ -321,6 +321,13 @@ Process:
 	call UpdateEnemiesOAM
 	.enemy_no_oam_update:
 
+	ld a, HIGH(wDMA)
+	ldh [rDMA], a
+	ld a, 40
+	.dma_loop:
+		dec a
+		jr nz, .dma_loop
+		
 	;debug printing
 	ld hl, Player
 	call LoadBytesTiles
@@ -465,7 +472,7 @@ changeStateDEAD:
 
 
 UpdatePlayerOAM:
-	ld hl, _OAMRAM
+	ld hl, wDMA
 	ld a, [Player + O_FLAGS]
 	and a, 0x20
 	swap a
@@ -483,7 +490,7 @@ UpdatePlayerOAM:
 
 	DEF i = 0
 	REPT 4	
-		ld hl, _OAMRAM + i*4
+		ld hl, wDMA + i*4
 		; Y coord = player.Y - SCY
 		ld a, [rSCY]
 		ld b, a
@@ -535,7 +542,7 @@ UpdatePlayerOAM:
 UpdateEnemiesOAM:
 	DEF i = 0
 	REPT NUM_ENEMIES
-		ld hl, _OAMRAM + 16 + 4 * i
+		ld hl, wDMA + 16 + 4 * i
 		ld a, [rSCY]
 		ld b, a
 		ld a, [Enemies + 4 * i + O_Y]
@@ -582,6 +589,9 @@ SECTION "Attributes", WRAM0
 	; 1 - jump
 	; 2 - dead
 	wMoveState: db
+
+SECTION "OAM Transfer", WRAM0, ALIGN[8]
+	wDMA: ds $80
 
 SECTION "Counter", WRAM0
 	wFrame: db
