@@ -498,7 +498,6 @@ UpdateOAM:
 	ENDR
 
 ; ~~~~~ UPDATE ENEMIES OAM: ~~~~~~~
-	; TODO: ONLY FIRST ENEMY!
 	DEF i = 0
 	REPT NUM_ENEMIES
 		ld hl, _OAMRAM + 16 + 4 * i
