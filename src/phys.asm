@@ -448,12 +448,7 @@ UpdateOAM:
 	; e will be used all throughout 'UpdateOAM' so don't override it!
 
 	DEF i = 0
-	REPT 4
-	; 0 -> (0, 0, 8 , +1)	
-	; 1 -> (0, 8, 12, -1)
-	; 2 -> (8, 0, 0 , +1)
-	; 3 -> (8, 8, 4 , -1)
-	
+	REPT 4	
 		ld hl, _OAMRAM + i*4
 		; Y coord = player.Y - SCY
 		ld a, [rSCY]
