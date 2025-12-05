@@ -292,7 +292,8 @@ Process:
 	.post_animate:
 
 	call adjustScreenPos
-	call UpdateOAM
+	call UpdatePlayerOAM
+	call UpdateEnemiesOAM
 
 	;debug printing
 	ld hl, Player
@@ -437,7 +438,7 @@ changeStateDEAD:
 	ret
 
 
-UpdateOAM:
+UpdatePlayerOAM:
 	ld hl, _OAMRAM
 	ld a, [Player + O_FLAGS]
 	and a, 0x20
@@ -503,8 +504,9 @@ UpdateOAM:
 
 	DEF i += 1
 	ENDR
+	ret
 
-; ~~~~~ UPDATE ENEMIES OAM: ~~~~~~~
+UpdateEnemiesOAM:
 	DEF i = 0
 	REPT NUM_ENEMIES
 		ld hl, _OAMRAM + 16 + 4 * i
