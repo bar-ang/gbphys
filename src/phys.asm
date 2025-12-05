@@ -438,9 +438,6 @@ changeStateDEAD:
 
 
 UpdateOAM:
-; TODO: a macro for preventing code dup would be nice.
-
-; BOTTOM LEFT
 	ld hl, _OAMRAM
 	ld a, [Player + O_FLAGS]
 	and a, 0x20
@@ -449,110 +446,56 @@ UpdateOAM:
 	sla a
 	ld e, a ; now e contains 8 if object is flipped or 0 otherwise
 	; e will be used all throughout 'UpdateOAM' so don't override it!
+
+	DEF i = 0
+	REPT 4
+	; 0 -> (0, 0, 8 , +1)	
+	; 1 -> (0, 8, 12, -1)
+	; 2 -> (8, 0, 0 , +1)
+	; 3 -> (8, 8, 4 , -1)
 	
-	; Y coord = player.Y - SCY
-	ld a, [rSCY]
-	ld b, a
-	ld a, [Player + O_Y]
-	sub a, b
-	add a, Y_OFFSET
-	ld [hli], a
-	; X coord = player.X - SCX
-	ld a, [rSCX]
-	ld b, a
-	ld a, [Player + O_X]
-	sub a, b
-	add a, e
-	add a, X_OFFSET
-	
-	ld [hli], a
-	; Tile ID
-	ld a, [Player + O_TILE]
-	add a, 8
-	ld [hli], a
-	;Flags
-	ld a, [Player + O_FLAGS]
-	ld [hli], a
+		ld hl, _OAMRAM + i*4
+		; Y coord = player.Y - SCY
+		ld a, [rSCY]
+		ld b, a
+		ld a, [Player + O_Y]
+		sub a, b
+		add a, Y_OFFSET
+		sub a, 8*(i / 2)
+		ld [hli], a
+		; X coord = player.X - SCX
+		ld a, [rSCX]
+		ld b, a
+		ld a, [Player + O_X]
+		sub a, b
+		add a, X_OFFSET
+		add a, 8*(i % 2)
+		IF i % 2 == 0
+			add a, e
+		ELSE
+			sub a, e
+		ENDC
+		ld [hli], a
+		; Tile ID
+		ld a, [Player + O_TILE]
+		IF i == 0
+			add a, 8
+		ELIF i == 1
+			add a, 12
+		ELIF i == 2
+		 	add a, 0
+		ELIF i == 3
+			add a, 4
+		ENDC
+			
+		ld [hli], a
+		;Flags
+		ld a, [Player + O_FLAGS]
+		ld [hli], a
+		
 
-
-; BOTTOM RIGHT
-	ld hl, _OAMRAM + 4
-	; Y coord = player.Y - SCY
-	ld a, [rSCY]
-	ld b, a
-	ld a, [Player + O_Y]
-	sub a, b
-	add a, Y_OFFSET
-	ld [hli], a
-	; X coord = player.X - SCX
-	ld a, [rSCX]
-	ld b, a
-	ld a, [Player + O_X]
-	sub a, b
-	add a, X_OFFSET
-	add a, 8
-	sub a, e
-	ld [hli], a
-	; Tile ID
-	ld a, [Player + O_TILE]
-	add a, 12
-	ld [hli], a
-	;Flags
-	ld a, [Player + O_FLAGS]
-	ld [hli], a
-
-
-; UPPER LEFT
-	ld hl, _OAMRAM + 8
-	; Y coord = player.Y - SCY
-	ld a, [rSCY]
-	ld b, a
-	ld a, [Player + O_Y]
-	sub a, b
-	add a, Y_OFFSET
-	sub a, 8
-	ld [hli], a
-	; X coord = player.X - SCX
-	ld a, [rSCX]
-	ld b, a
-	ld a, [Player + O_X]
-	sub a, b
-	add a, X_OFFSET
-	add a, e
-	ld [hli], a
-	; Tile ID
-	ld a, [Player + O_TILE]
-	ld [hli], a
-	;Flags
-	ld a, [Player + O_FLAGS]
-	ld [hli], a
-
-;UPPER RIGHT
-	ld hl, _OAMRAM + 12
-	; Y coord = player.Y - SCY
-	ld a, [rSCY]
-	ld b, a
-	ld a, [Player + O_Y]
-	sub a, b
-	add a, Y_OFFSET
-	sub a, 8
-	ld [hli], a
-	; X coord = player.X - SCX
-	ld a, [rSCX]
-	ld b, a
-	ld a, [Player + O_X]
-	sub a, b
-	add a, X_OFFSET
-	add a, 8
-	sub a, e
-	ld [hli], a
-	; Tile ID
-	ld a, [Player + O_TILE]
-	add a, 4
-	ld [hli], a
-	;Flags
-	ld a, [Player + O_FLAGS]
-	ld [hli], a
+	DEF i += 1
+	ENDR
 
 ; ~~~~~ UPDATE ENEMIES OAM: ~~~~~~~
 	; TODO: ONLY FIRST ENEMY!
