@@ -444,8 +444,15 @@ UpdateOAM:
 	swap a
 	sla a
 	sla a
-	ld e, a ; now e contains 8 if object is flipped or 0 otherwise
+	ld e, a ; now e contains 8 if object is flipped vertically or 0 otherwise
 	; e will be used all throughout 'UpdateOAM' so don't override it!
+
+	ld a, [Player + O_FLAGS]
+	and a, 0x40
+	swap a
+	sla a
+	ld d, a ; now d contains 8 if object is flipped horizontally or 0 otherwise
+	; d will be used all throughout 'UpdateOAM' so don't override it!
 
 	DEF i = 0
 	REPT 4	
@@ -457,6 +464,11 @@ UpdateOAM:
 		sub a, b
 		add a, Y_OFFSET
 		sub a, 8*(i / 2)
+		IF i / 2 == 0
+			sub a, d
+		ELSE
+			add a, d
+		ENDC
 		ld [hli], a
 		; X coord = player.X - SCX
 		ld a, [rSCX]
