@@ -20,6 +20,12 @@ DEF O_FLAGS EQU 3
 
 MACRO set_player
 	ld [Player + \1], a
+	ld e, a
+	ld a, [wOAMupdateRequired]
+	or a, 1
+	ld [wOAMupdateRequired], a
+	ld a, e
+	
 ENDM
 
 SECTION "Header", ROM0[$100]
@@ -126,6 +132,9 @@ Process:
 	ld a, [wFrame]
 	inc a
 	ld [wFrame], a
+
+	ld a, 2
+	ld [wOAMupdateRequired], a
 
 	ld a, [wMoveState]
 	cp MOVE_STATE_REST
@@ -296,9 +305,21 @@ Process:
 	set_player O_TILE
 	.post_animate:
 
+	
+	
+	ld a, [wOAMupdateRequired]
+	and a, 1
+	jp z, .player_no_oam_update
 	call adjustScreenPos
 	call UpdatePlayerOAM
+	.player_no_oam_update:
+	
+	
+	ld a, [wOAMupdateRequired]
+	and a, 2
+	jp z, .enemy_no_oam_update
 	call UpdateEnemiesOAM
+	.enemy_no_oam_update:
 
 	;debug printing
 	ld hl, Player
@@ -551,6 +572,11 @@ SECTION "Attributes", WRAM0
 	Enemies: ds (EndEnemiesSpawnData - EnemiesSpawnData)
 	wJumpMath: db
 	wEnemyMath: db
+	
+	; this byte will use as a collection of 1-byte flags:
+	; bit 0 - indicates if the player OAM should be updated
+	; bit 1 - indicates if the enemies OAM shoud be updated
+	wOAMupdateRequired: db
 
 	; 0 - rest
 	; 1 - jump
