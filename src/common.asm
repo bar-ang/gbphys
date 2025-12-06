@@ -120,6 +120,9 @@ MACRO dma_to_hram
 	call Memcpy
 ENDM
 
+SECTION "OAM Transfer", WRAM0, ALIGN[8]
+	wDMA: ds $100
+
 SECTION "DMA Transfer Code", ROM0
 	RunDMA:
 		ld a, HIGH(wDMA)
