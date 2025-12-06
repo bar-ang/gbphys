@@ -323,12 +323,8 @@ Process:
 	call UpdateEnemiesOAM
 	.enemy_no_oam_update:
 
-	ld a, HIGH(wDMA)
-	ldh [rDMA], a
-	ld a, 40
-	.dma_loop:
-		dec a
-		jr nz, .dma_loop
+	
+	call RunHDMA
 		
 	;debug printing
 	ld hl, Player
