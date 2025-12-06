@@ -28,6 +28,31 @@ MACRO set_player
 	
 ENDM
 
+MACRO jump_math
+		ld a, [wJumpMath]
+		inc a
+		ld [wJumpMath], a
+		ld hl, PseudoParabola
+		ld a, [wJumpMath]
+		ld c, a
+		ld b, 0
+		add hl, bc
+		ld a, [hl]
+		ld b, a
+		ld a, [Player + O_Y]
+		sub a, b
+		set_player O_Y
+
+		ld a, c; note that c == [wJumpMath]
+		cp a, PseudoParabola.maximum - PseudoParabola
+		jp c, \1
+
+		; switch to REST if hitting the ground
+		call TestFloorCollision
+		jp nz, \1
+
+ENDM
+
 SECTION "Header", ROM0[$100]
 	jp Init
 	ds $150 - @, 0 ; Make room for the header
@@ -152,27 +177,8 @@ Process:
 		call StartFalling
 		jp .post_switch
 	.jump:
-		ld a, [wJumpMath]
-		inc a
-		ld [wJumpMath], a
-		ld hl, PseudoParabola
-		ld a, [wJumpMath]
-		ld c, a
-		ld b, 0
-		add hl, bc
-		ld a, [hl]
-		ld b, a
-		ld a, [Player + O_Y]
-		sub a, b
-		set_player O_Y
+		jump_math .post_switch
 
-		ld a, c; note that c == [wJumpMath]
-		cp a, PseudoParabola.maximum - PseudoParabola
-		jp c, .post_switch
-		
-		; switch to REST if hitting the ground
-		call TestFloorCollision
-		jp nz, .post_switch
 		call changeStateREST
 		
 	.post_switch:
