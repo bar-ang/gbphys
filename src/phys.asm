@@ -155,12 +155,6 @@ Process:
 		ld a, [wJumpMath]
 		inc a
 		ld [wJumpMath], a
-		cp a, EndPseudoParabola - PseudoParabola - 1
-		jp nz, .cont_jump
-		call changeStateREST
-		jp .post_switch
-		
-		.cont_jump:
 		ld hl, PseudoParabola
 		ld a, [wJumpMath]
 		ld c, a
@@ -174,17 +168,13 @@ Process:
 
 		ld a, c; note that c == [wJumpMath]
 		cp a, PseudoParabola.maximum - PseudoParabola
-		jp nc, .hit_ground_test
-		jp .post_switch
-
-	.hit_ground_test:
+		jp c, .post_switch
+		
+		; switch to REST if hitting the ground
 		call TestFloorCollision
 		jp nz, .post_switch
-
-		; switch to REST if hitting the ground
 		call changeStateREST
 		
-		jp .post_switch
 	.post_switch:
 
 	; making the enemies move
