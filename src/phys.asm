@@ -8,9 +8,10 @@ INCLUDE "assets/pseudo_math.asm"
 DEF SPAWN_X    EQU $40
 DEF SPAWN_Y    EQU $d0
 
-DEF MOVE_STATE_REST EQU 0
-DEF MOVE_STATE_JUMP EQU 1
-DEF MOVE_STATE_DEAD EQU 2
+DEF MOVE_STATE_REST  EQU 0
+DEF MOVE_STATE_JUMP  EQU 1
+DEF MOVE_STATE_DYING EQU 2
+DEF MOVE_STATE_DEAD  EQU 3
 
 DEF O_Y     EQU 0
 DEF O_X     EQU 1
@@ -168,6 +169,8 @@ Process:
 	jp z, .rest
 	cp MOVE_STATE_JUMP
 	jp z, .jump
+	cp MOVE_STATE_DYING
+	jp z, .dying
 	jp .post_switch ; default
 
 	.rest:
@@ -178,9 +181,12 @@ Process:
 		jp .post_switch
 	.jump:
 		jump_math .post_switch
-
+		; 'jump_math' will jump to .post_switch unless hitting the ground
 		call changeStateREST
-		
+		jp .post_switch
+	.dying:
+		jump_math .post_switch
+		call changeStateDEAD
 	.post_switch:
 
 	; making the enemies move
@@ -225,7 +231,7 @@ Process:
 	call TestEnemyCollision
 	cp a, $ff
 	jp z, .still_alive
-	call changeStateDEAD
+	call changeStateDYING
 	.still_alive:
 	
 	; handle keyboard input
@@ -454,16 +460,22 @@ changeStateJUMP:
 	ld [wJumpMath], a
 	ret
 
-changeStateDEAD:
-	ld a, MOVE_STATE_DEAD
+changeStateDYING:
+	ld a, MOVE_STATE_DYING
 	ld [wMoveState], a
 	ld a, PLAYER_WALK
 	ld [Player + O_TILE], a
 	ld a, [Player + O_FLAGS]
 	or a, $40
 	set_player O_FLAGS
+	ld a, PseudoParabola.maximum - PseudoParabola + 4
+	ld [wJumpMath], a
 	ret
 
+changeStateDEAD:
+	ld a, MOVE_STATE_DEAD
+	ld [wMoveState], a
+	ret
 
 UpdatePlayerOAM:
 	ld hl, wDMA
