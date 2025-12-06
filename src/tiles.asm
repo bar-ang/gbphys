@@ -82,7 +82,7 @@ EndTileMap:
 
 SECTION "Data", ROM0
 
-DEF NUM_ENEMIES EQU 3
+DEF NUM_ENEMIES EQU 5
 
 EnemiesSpawnData:
 ; each enemy has 3 bytes:
@@ -90,6 +90,7 @@ EnemiesSpawnData:
         db $bf, $90, ENEMY_ORAM, 0
 .single: ; used to calcute the size of each enemy
         db $c1, $11, ENEMY_ORAM, 0
-;        db $df, $65, ENEMY_ORAM, 0
+        db $df, $65, ENEMY_ORAM, 0
         db $9f, $75, ENEMY_ORAM, 0
+        db $5f, $70, ENEMY_ORAM, 0
 EndEnemiesSpawnData:
