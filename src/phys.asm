@@ -589,7 +589,7 @@ SECTION "Attributes", WRAM0
 	wMoveState: db
 
 SECTION "OAM Transfer", WRAM0, ALIGN[8]
-	wDMA: ds $80
+	wDMA: ds $100
 
 SECTION "Counter", WRAM0
 	wFrame: db
