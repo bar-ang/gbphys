@@ -111,3 +111,25 @@ GetTile:
         add hl, bc
         ld a, [hl]
         ret
+
+
+MACRO dma_to_hram
+	ld hl, RunHDMA
+	ld de, RunDMA
+	ld bc, RunDMA.endf - RunDMA
+	call Memcpy
+ENDM
+
+SECTION "DMA Transfer Code", ROM0
+	RunDMA:
+		ld a, HIGH(wDMA)
+		ldh [rDMA], a  ; start DMA transfer (starts right after instruction)
+		ld a, 40        ; delay for a total of 4×40 = 160 M-cycles
+		.wait
+			dec a           ; 1 M-cycle
+			jr nz, .wait    ; 3 M-cycles
+		ret
+	.endf
+	
+SECTION "HDMA Transfer Code", HRAM
+	RunHDMA: ds RunDMA.endf - RunDMA

@@ -75,6 +75,7 @@ Init:
 
 	call ClearOAM
 	call ClearWorkDMA
+	dma_to_hram
 
 	ld a, SPAWN_X
 	ld [Player + O_X], a
