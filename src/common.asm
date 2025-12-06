@@ -42,6 +42,13 @@ ClearOAM:
         call Memset
         ret
 
+ClearWorkDMA:
+        ld de, 0
+        ld hl, wDMA
+        ld bc, OAMSIZE
+        call Memset
+        ret
+
 ; @param hl - obj address
 ; @param b - x coord
 ; @param c - y coord
