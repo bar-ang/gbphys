@@ -82,7 +82,6 @@ EndTileMap:
 
 SECTION "Data", ROM0
 
-DEF NUM_ENEMIES EQU 5
 
 EnemiesSpawnData:
 ; each enemy has 3 bytes:
@@ -94,3 +93,7 @@ EnemiesSpawnData:
         db $9f, $75, ENEMY_ORAM, 0
         db $5f, $70, ENEMY_ORAM, 0
 EndEnemiesSpawnData:
+
+DEF NUM_ENEMIES EQU \
+        (EndEnemiesSpawnData-EnemiesSpawnData)/ \
+        (EnemiesSpawnData.single-EnemiesSpawnData)
