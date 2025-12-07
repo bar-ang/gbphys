@@ -77,7 +77,7 @@ EndASCII:
 SECTION "Tilemap", ROM0
 
 TileMap:
-        INCBIN "assets/tilemap.2bpp"
+        INCLUDE "assets/tilemap.asm"
 EndTileMap:
 
 SECTION "Data", ROM0

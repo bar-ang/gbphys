@@ -80,9 +80,9 @@ Init:
 	call Memcpy
 
 
-	ld de, TileMap
+	ld de, EndTileMap - $400
 	ld hl, $9800
-	ld bc, EndTileMap - TileMap
+	ld bc, $400
 	call Memcpy
 
 
