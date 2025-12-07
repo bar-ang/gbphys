@@ -335,17 +335,6 @@ Process:
 	jp Process
 
 adjustScreenPos:
-	ld a, [Player + O_X]
-	sub a, 80
-	jp nc, .no_edge_left
-	ld a, 0
-	.no_edge_left:
-	cp a, 96
-	jp c, .no_edge_right
-	ld a, 95
-	.no_edge_right:
-	ld [rSCX], a
-	
 	ld a, [Player + O_Y]
 	sub a, 108
 	jp nc, .no_edge_top
@@ -511,10 +500,7 @@ UpdatePlayerOAM:
 		ENDC
 		ld [hli], a
 		; X coord = player.X - SCX
-		ld a, [rSCX]
-		ld b, a
 		ld a, [Player + O_X]
-		sub a, b
 		add a, X_OFFSET
 		add a, 8*(i % 2)
 		IF i % 2 == 0
@@ -556,11 +542,8 @@ UpdateEnemiesOAM:
 		sub a, b
 		ld [hli], a
 
-		ld a, [rSCX]
-		ld b, a
 		ld a, [Enemies + 4 * i + O_X]
 		add a, X_OFFSET
-		sub a, b
 		ld [hli], a
 		ld a, [Enemies + 4 * i + O_TILE]
 		ld [hli], a
