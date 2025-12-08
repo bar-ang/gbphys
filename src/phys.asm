@@ -340,12 +340,57 @@ Process:
 
 	
 	; call RunHDMA
+	call handleScreenGen
 		
 	;debug printing
 	ld hl, Player
 	call LoadBytesTiles
 
 	jp Process
+
+handleScreenGen:
+	ld a, [rSCY]
+	srl a
+	srl a
+	srl a
+
+	ld b, a
+	ld a, [wWorldPos]
+	and a, 0x1f
+	cp a, b
+	ret z
+
+	; TODO: assuming moving by 1
+	; need to calculate the step size
+	ld a, [wWorldPos]
+	inc a
+	ld [wWorldPos], a
+	
+	;TODO: assume screen moving DOWN. i.e: rSCY/8 > a
+	add a, 18
+	and a, $1F
+	ld c, a
+	shift5
+
+	call WaitVBlank
+	ld hl, $9800
+	add hl, bc
+	push hl
+
+	ld a, [wWorldPos]
+	ld c, a
+	shift5
+	ld hl, TileMap + $20 * 18
+	add hl, bc
+	ld d, h
+	ld e, l
+	pop hl
+
+
+	ld bc, 32
+	call Memcpy
+
+	ret
 
 adjustScreenPos:
 	ld a, [Player + O_Y]
