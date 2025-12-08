@@ -156,8 +156,8 @@ Init:
 	ld [wEnemyMath], a
 
 	xor a, a; TODO: need to set the bottom of the map
-	ld [wWorldPosition], a
-	ld [wScreenPosition], a
+	ld [wWorldPos], a
+	ld [wScreenPos], a
 	
 Process:
 	call WaitVBlank
@@ -250,17 +250,17 @@ Process:
 	ld a, [wCurKeys]
 	and a, PADF_A
 	jp z, .post_a
-	ld a, [wWorldPosition]
+	ld a, [wWorldPos]
 	inc a
-	ld [wWorldPosition], a
+	ld [wWorldPos], a
 	.post_a:
 	
 	ld a, [wCurKeys]
 	and a, PADF_B
 	jp z, .post_b
-	ld a, [wScreenPosition]
+	ld a, [wScreenPos]
 	inc a
-	ld [wScreenPosition], a
+	ld [wScreenPos], a
 	.post_b:
 
 	; Left
@@ -582,8 +582,8 @@ SECTION "Attributes", WRAM0
 	Enemies: ds (EndEnemiesSpawnData - EnemiesSpawnData)
 	wJumpMath: db
 	wEnemyMath: db
-	wWorldPosition: db
-	wScreenPosition: db ;TODO: Eventually this will probably be identical to SCY.
+	wWorldPos: db
+	wScreenPos: db ;TODO: Eventually this will probably be identical to SCY.
 		;but I leave it that way for now for debugging purposes
 	
 	; this byte will use as a collection of 1-byte flags:
