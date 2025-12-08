@@ -357,8 +357,21 @@ Process:
 	jp Process
 
 adjustScreenPos:
-	ld a, [wScreenPosition]
+	; TODO: let's begin with an inefficient method:
+	ld hl, TileMap
+	ld a, [wWorldPos]
+	ld c, a
+	shift5 ; bc = (wWorldPos << 5)
+	add hl, bc
+	ld d, h
+	ld e, l
+	ld hl, $9800
+	ld bc, $400
+	call Memcpy
+
+	ld a, [wScreenPos]
 	ld [rSCY], a
+
 	ret
 
 ; @return: set in A the enemy address (with 'Enemies' subtracted to save 1 byte)
