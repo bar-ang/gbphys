@@ -329,7 +329,7 @@ Process:
 	.enemy_no_oam_update:
 
 	
-	call RunHDMA
+	; call RunHDMA
 		
 	;debug printing
 	ld hl, Player
