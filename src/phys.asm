@@ -157,6 +157,7 @@ Init:
 
 	xor a, a; TODO: need to set the bottom of the map
 	ld [wWorldPosition], a
+	ld [wScreenPosition], a
 	
 Process:
 	call WaitVBlank
