@@ -338,12 +338,39 @@ Process:
 
 	
 	; call RunHDMA
+	call handleScreenGen
 		
 	;debug printing
 	ld hl, wDebugData
 	call LoadBytesTiles
 
 	jp Process
+
+handleScreenGen:
+	DEF MARGIN = 2
+	ld a, [rSCY]
+	srl a
+	srl a
+	srl a
+
+	cp a, 14 - MARGIN
+	ret c
+	cp a, 32 - MARGIN
+	ret nc
+
+	add a, 18 + MARGIN
+	and a, 0x1F
+
+	ld c, a
+	shift5
+	ld hl, $9800
+	add hl, bc
+	ld bc, $20
+	ld d, -128
+	call Memset
+	call WaitVBlank
+	
+	ret
 
 adjustScreenPos:
 	ld a, [Player + O_Y]
