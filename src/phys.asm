@@ -572,6 +572,8 @@ SECTION "Attributes", WRAM0
 	wJumpMath: db
 	wEnemyMath: db
 	wWorldPosition: db
+	wScreenPosition: db ;TODO: Eventually this will probably be identical to SCY.
+		;but I leave it that way for now for debugging purposes
 	
 	; this byte will use as a collection of 1-byte flags:
 	; bit 0 - indicates if the player OAM should be updated
