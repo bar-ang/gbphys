@@ -361,6 +361,14 @@ handleScreenGen:
 	add a, 18 + MARGIN
 	and a, 0x1F
 
+	push af
+	ld [wDebugData], a
+	xor a
+	ld [wDebugData+1], a
+	ld [wDebugData+2], a
+	ld [wDebugData+3], a
+	pop af
+
 	ld c, a
 	shift5
 	ld hl, $9800
