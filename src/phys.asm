@@ -337,6 +337,59 @@ Process:
 
 	jp Process
 
+handleScreenGen:
+	; calculate screen position in terms of tiles
+	ld a, [rSCY]
+	srl a
+	srl a
+	srl a
+	ld b, a
+
+	; if: wWorldPos == rSCY/8 (mod 32) -> do nothing
+	ld a, [wWorldPos]
+	sub a, b
+	and a, 0x1f
+	ret z
+
+	; now: wWorldPos != rSCY/8 (mod 32)
+	; TODO: we assume wWorldPos-rSCY/8 = -1
+	ld a, [wWorldPos]
+	dec a
+	ld [wWorldPos], a
+	
+	call WaitVBlank
+	;TODO: assume screen moving UP. i.e: rSCY/8 < a
+	; calculate destination:
+	;    put the new tiles 18 rows ahead of SCY
+	ld a, [rSCY]
+	srl a
+	srl a
+	srl a
+	add a, 0
+	and a, $1F ; (a + 18 mod 32)
+	ld c, a
+	shift5
+	ld hl, $9800
+	add hl, bc
+	push hl
+
+	; calculate source:
+	;   we should take from Tilemap row in
+	;   position wWorldPos+18
+	ld a, [wWorldPos]
+	ld c, a
+	shift5
+	ld hl, TileMap
+	add hl, bc
+	ld d, h
+	ld e, l
+	pop hl
+
+	ld bc, 32 ; TODO: currently assuming just one step of SCY
+	call Memcpy
+
+	ret
+
 adjustScreenPos:
 	ld a, [Player + O_Y]
 	sub a, 108
