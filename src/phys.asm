@@ -156,6 +156,7 @@ Init:
 	ld [wEnemyMath], a
 	
 Process:
+	call adjustScreenPos
 	call WaitVBlank
 	ld a, [wFrame]
 	inc a
@@ -314,7 +315,6 @@ Process:
 	ld a, [wOAMupdateRequired]
 	and a, 1
 	jp z, .player_no_oam_update
-	call adjustScreenPos
 	call UpdatePlayerOAM
 	.player_no_oam_update:
 	
@@ -326,7 +326,7 @@ Process:
 	.enemy_no_oam_update:
 
 	
-	call RunHDMA
+	; call RunHDMA
 		
 	;debug printing
 	ld hl, Player
