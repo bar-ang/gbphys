@@ -351,7 +351,7 @@ Process:
 	; call RunHDMA
 		
 	;debug printing
-	ld hl, wWorldPosition
+	ld hl, wWorldPos
 	call LoadBytesTiles
 
 	jp Process
