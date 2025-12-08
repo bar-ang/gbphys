@@ -154,6 +154,9 @@ Init:
 
 	ld a, 0
 	ld [wEnemyMath], a
+
+	xor a, a; TODO: need to set the bottom of the map
+	ld [wWorldPosition], a
 	
 Process:
 	call WaitVBlank
@@ -568,6 +571,7 @@ SECTION "Attributes", WRAM0
 	Enemies: ds (EndEnemiesSpawnData - EnemiesSpawnData)
 	wJumpMath: db
 	wEnemyMath: db
+	wWorldPosition: db
 	
 	; this byte will use as a collection of 1-byte flags:
 	; bit 0 - indicates if the player OAM should be updated
