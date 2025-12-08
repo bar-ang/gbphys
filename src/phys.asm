@@ -340,7 +340,7 @@ Process:
 	; call RunHDMA
 		
 	;debug printing
-	ld hl, Player
+	ld hl, wDebugData
 	call LoadBytesTiles
 
 	jp Process
@@ -579,6 +579,7 @@ SECTION "Attributes", WRAM0
 	Enemies: ds (EndEnemiesSpawnData - EnemiesSpawnData)
 	wJumpMath: db
 	wEnemyMath: db
+	wDebugData: ds 4
 	
 	; this byte will use as a collection of 1-byte flags:
 	; bit 0 - indicates if the player OAM should be updated
