@@ -120,6 +120,22 @@ MACRO dma_to_hram
 	call Memcpy
 ENDM
 
+; @param  number in c
+; @return  bc := (c << 5)
+MACRO shift5
+	ld a, c
+	srl a
+	srl a
+	srl a
+	ld b, a
+	ld a, c
+	and a, $7
+	swap a
+	sla a
+	ld c, a
+ENDM
+
+
 SECTION "OAM Transfer", WRAM0, ALIGN[8]
 	wDMA: ds $100
 
