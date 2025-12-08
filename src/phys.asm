@@ -245,6 +245,24 @@ Process:
 	cp a, MOVE_STATE_DEAD
 	jp z, .post_animate
 
+
+	; DEBUG: screen move
+	ld a, [wCurKeys]
+	and a, PADF_A
+	jp z, .post_a
+	ld a, [wWorldPosition]
+	inc a
+	ld [wWorldPosition], a
+	.post_a:
+	
+	ld a, [wCurKeys]
+	and a, PADF_B
+	jp z, .post_b
+	ld a, [wScreenPosition]
+	inc a
+	ld [wScreenPosition], a
+	.post_b:
+
 	; Left
 	ld a, [wCurKeys]
 	and a, PADF_LEFT
@@ -333,21 +351,13 @@ Process:
 	; call RunHDMA
 		
 	;debug printing
-	ld hl, Player
+	ld hl, wWorldPosition
 	call LoadBytesTiles
 
 	jp Process
 
 adjustScreenPos:
-	ld a, [Player + O_Y]
-	sub a, 108
-	jp nc, .no_edge_top
-	ld a, 0
-	.no_edge_top:
-	cp a, 112
-	jp c, .no_edge_bottom
-	ld a, 111
-	.no_edge_bottom:
+	ld a, [wScreenPosition]
 	ld [rSCY], a
 	ret
 
