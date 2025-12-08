@@ -94,3 +94,5 @@ EnemiesSpawnData:
         db $9f, $75, ENEMY_ORAM, 0
         db $5f, $70, ENEMY_ORAM, 0
 EndEnemiesSpawnData:
+
+DEF MAP_HEIGHT EQU (EndTileMap-TileMap)/32
