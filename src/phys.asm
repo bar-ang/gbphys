@@ -79,7 +79,7 @@ Init:
 	call Memcpy
 
 
-	ld de, EndTileMap - $400
+	ld de, TileMap
 	ld hl, $9800
 	ld bc, $400
 	call Memcpy
@@ -148,13 +148,14 @@ Init:
 	;moving the screen to bottom-left corner
 	ld a, 0
 	ld [rSCX], a
-	ld a, 111
+	ld a, 0
 	ld [rSCY], a
 
 	ld a, 0
 	ld [wEnemyMath], a
 	
 Process:
+	; call adjustScreenPos
 	call WaitVBlank
 	ld a, [wFrame]
 	inc a
@@ -284,16 +285,27 @@ Process:
 
 
 	; Up
-	ld a, [wMoveState]
-	cp MOVE_STATE_REST
-	jp nz, .post_up
-
-	ld a, [wNewKeys]
+	ld a, [wCurKeys]
 	and a, PADF_UP
 	jp z, .post_up
-	
-	call changeStateJUMP
+
+	ld a, [rSCY]
+	dec a
+	ld [rSCY], a
 	.post_up:
+
+	; Down
+	ld a, [wCurKeys]
+	and a, PADF_DOWN
+	jp z, .post_down
+
+	ld a, [rSCY]
+	inc a
+	ld [rSCY], a
+
+	.post_down:
+	
+	; call changeStateJUMP
 
 	; animate the player
 	ld a, [wCurKeys]
@@ -313,7 +325,6 @@ Process:
 	ld a, [wOAMupdateRequired]
 	and a, 1
 	jp z, .player_no_oam_update
-	call adjustScreenPos
 	call UpdatePlayerOAM
 	.player_no_oam_update:
 	
@@ -325,7 +336,7 @@ Process:
 	.enemy_no_oam_update:
 
 	
-	call RunHDMA
+	; call RunHDMA
 		
 	;debug printing
 	ld hl, Player
