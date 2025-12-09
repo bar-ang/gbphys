@@ -30,28 +30,27 @@ MACRO set_player
 ENDM
 
 MACRO jump_math
-		ld a, [wJumpMath]
-		inc a
-		ld [wJumpMath], a
-		ld hl, PseudoParabola
-		ld a, [wJumpMath]
-		ld c, a
-		ld b, 0
-		add hl, bc
-		ld a, [hl]
-		ld b, a
-		ld a, [Player + O_Y]
-		sub a, b
-		set_player O_Y
+	ld a, [wJumpMath]
+	inc a
+	ld [wJumpMath], a
+	ld hl, PseudoParabola
+	ld a, [wJumpMath]
+	ld c, a
+	ld b, 0
+	add hl, bc
+	ld a, [hl]
+	ld b, a
+	ld a, [Player + O_Y]
+	sub a, b
+	set_player O_Y
 
-		ld a, c; note that c == [wJumpMath]
-		cp a, PseudoParabola.maximum - PseudoParabola
-		jp c, \1
+	ld a, c; note that c == [wJumpMath]
+	cp a, PseudoParabola.maximum - PseudoParabola
+	jp c, \1
 
-		; switch to REST if hitting the ground
-		call TestFloorCollision
-		jp nz, \1
-
+	; switch to REST if hitting the ground
+	call TestFloorCollision
+	jp nz, \1
 ENDM
 
 SECTION "Header", ROM0[$100]
