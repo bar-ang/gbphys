@@ -150,6 +150,9 @@ Init:
 	ld [rSCX], a
 	ld a, 111
 	ld [rSCY], a
+	; NOTE: remember to divide a by 8!
+	;        wWorldPos = rSCY / 8
+	ld [wWorldPos], a
 
 	ld a, 0
 	ld [wEnemyMath], a
@@ -567,6 +570,7 @@ SECTION "Attributes", WRAM0
 	Enemies: ds (EndEnemiesSpawnData - EnemiesSpawnData)
 	wJumpMath: db
 	wEnemyMath: db
+	wWorldPos: db
 	
 	; this byte will use as a collection of 1-byte flags:
 	; bit 0 - indicates if the player OAM should be updated
