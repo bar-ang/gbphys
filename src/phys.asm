@@ -78,7 +78,7 @@ Init:
 	ld bc, EndObjects - Objects
 	call Memcpy
 
-	DEF startingWorldPos = 96-18
+	DEF startingWorldPos = 64-18 ;96-18
 	ld a, startingWorldPos
 	ld [wWorldPos], a
 
@@ -355,7 +355,37 @@ MACRO scroll_up
 	srl a
 	srl a
 	srl a
-	add a, 0
+	and a, $1F ; (a mod 32)
+	ld c, a
+	shift5
+	ld hl, $9800
+	add hl, bc
+	push hl
+
+	; calculate source:
+	;   we should take from Tilemap row in
+	;   position wWorldPos
+	ld a, [wWorldPos]
+	ld c, a
+	shift5
+	ld hl, TileMap
+	add hl, bc
+	ld d, h
+	ld e, l
+	pop hl
+
+	ld bc, 32 ; TODO: currently assuming just one step of SCY
+	call Memcpy
+ENDM
+
+MACRO scroll_down
+	; calculate destination:
+	;    put the new tiles 18 rows ahead of SCY
+	ld a, [rSCY]
+	srl a
+	srl a
+	srl a
+	add a, 18
 	and a, $1F ; (a + 18 mod 32)
 	ld c, a
 	shift5
@@ -369,7 +399,7 @@ MACRO scroll_up
 	ld a, [wWorldPos]
 	ld c, a
 	shift5
-	ld hl, TileMap
+	ld hl, TileMap + $20 * 18
 	add hl, bc
 	ld d, h
 	ld e, l
@@ -413,10 +443,17 @@ handleScreenGen:
 	ld a, [wWorldPos]
 	add a, b
 	ld [wWorldPos], a
-	
+
+	ld a, b
+	and a, $80
+	jp z, .call_scroll_down
+	scroll_up
+	jp .after_scroll
+	.call_scroll_down:
 	call WaitVBlank
-	;TODO: assume screen moving UP. i.e: rSCY/8 < a
-	scroll_up	
+	scroll_down
+
+	.after_scroll:
 
 	ret
 
