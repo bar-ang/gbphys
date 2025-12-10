@@ -158,6 +158,7 @@ Init:
 	ld [wEnemyMath], a
 	
 Process:
+	; call adjustScreenPos
 	call WaitVBlank
 	ld a, [wFrame]
 	inc a
@@ -287,16 +288,27 @@ Process:
 
 
 	; Up
-	ld a, [wMoveState]
-	cp MOVE_STATE_REST
-	jp nz, .post_up
-
-	ld a, [wNewKeys]
+	ld a, [wCurKeys]
 	and a, PADF_UP
 	jp z, .post_up
-	
-	call changeStateJUMP
+
+	ld a, [rSCY]
+	dec a
+	ld [rSCY], a
 	.post_up:
+
+	; Down
+	ld a, [wCurKeys]
+	and a, PADF_DOWN
+	jp z, .post_down
+
+	ld a, [rSCY]
+	inc a
+	ld [rSCY], a
+
+	.post_down:
+	
+	; call changeStateJUMP
 
 	; animate the player
 	ld a, [wCurKeys]
@@ -316,7 +328,6 @@ Process:
 	ld a, [wOAMupdateRequired]
 	and a, 1
 	jp z, .player_no_oam_update
-	call adjustScreenPos
 	call UpdatePlayerOAM
 	.player_no_oam_update:
 	
@@ -328,10 +339,10 @@ Process:
 	.enemy_no_oam_update:
 
 	
-	call RunHDMA
+	; call RunHDMA
 		
 	;debug printing
-	ld hl, Player
+	ld hl, wWorldPos
 	call LoadBytesTiles
 
 	jp Process
@@ -349,6 +360,7 @@ handleScreenGen:
 	sub a, b
 	and a, 0x1f
 	ret z
+	ld [wWorldPos+1], a
 
 	; now: wWorldPos != rSCY/8 (mod 32)
 	; TODO: we assume wWorldPos-rSCY/8 = -1
@@ -624,6 +636,7 @@ SECTION "Attributes", WRAM0
 	wJumpMath: db
 	wEnemyMath: db
 	wWorldPos: db
+	dw
 	
 	; this byte will use as a collection of 1-byte flags:
 	; bit 0 - indicates if the player OAM should be updated
