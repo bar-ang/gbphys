@@ -348,6 +348,37 @@ Process:
 
 	jp Process
 
+MACRO scroll_up
+	; calculate destination:
+	;    put the new tiles 18 rows ahead of SCY
+	ld a, [rSCY]
+	srl a
+	srl a
+	srl a
+	add a, 0
+	and a, $1F ; (a + 18 mod 32)
+	ld c, a
+	shift5
+	ld hl, $9800
+	add hl, bc
+	push hl
+
+	; calculate source:
+	;   we should take from Tilemap row in
+	;   position wWorldPos+18
+	ld a, [wWorldPos]
+	ld c, a
+	shift5
+	ld hl, TileMap
+	add hl, bc
+	ld d, h
+	ld e, l
+	pop hl
+
+	ld bc, 32 ; TODO: currently assuming just one step of SCY
+	call Memcpy
+ENDM
+
 handleScreenGen:
 	; calculate screen position in terms of tiles
 	ld a, [rSCY]
@@ -385,34 +416,7 @@ handleScreenGen:
 	
 	call WaitVBlank
 	;TODO: assume screen moving UP. i.e: rSCY/8 < a
-	; calculate destination:
-	;    put the new tiles 18 rows ahead of SCY
-	ld a, [rSCY]
-	srl a
-	srl a
-	srl a
-	add a, 0
-	and a, $1F ; (a + 18 mod 32)
-	ld c, a
-	shift5
-	ld hl, $9800
-	add hl, bc
-	push hl
-
-	; calculate source:
-	;   we should take from Tilemap row in
-	;   position wWorldPos+18
-	ld a, [wWorldPos]
-	ld c, a
-	shift5
-	ld hl, TileMap
-	add hl, bc
-	ld d, h
-	ld e, l
-	pop hl
-
-	ld bc, 32 ; TODO: currently assuming just one step of SCY
-	call Memcpy
+	scroll_up	
 
 	ret
 
