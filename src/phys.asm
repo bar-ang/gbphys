@@ -370,6 +370,7 @@ handleScreenGen:
 	add a, b
 	ld [wWorldPos], a
 	
+	call WaitVBlank
 	;TODO: assume screen moving DOWN. i.e: rSCY/8 > a
 	; calculate destination:
 	;    put the new tiles 18 rows ahead of SCY
@@ -377,8 +378,6 @@ handleScreenGen:
 	and a, $1F ; (a + 18 mod 32)
 	ld c, a
 	shift5
-
-	call WaitVBlank
 	ld hl, $9800
 	add hl, bc
 	push hl
