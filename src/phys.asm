@@ -349,31 +349,49 @@ Process:
 	jp Process
 
 handleScreenGen:
+	; calculate screen position in terms of tiles
 	ld a, [rSCY]
 	srl a
 	srl a
 	srl a
-
 	ld b, a
+
+	; if: wWorldPos == rSCY/8 (mod 32) -> do nothing
+	ld a, [wWorldPos]
+	sub a, b
+	and a, 0x1f
+	ret z
+
+	; now: wWorldPos != rSCY/8 (mod 32)
+	; we shold find: (wWorldPos mod 32) - rSCY/8
 	ld a, [wWorldPos]
 	and a, 0x1f
-	sub a, b
-	ret z
+	sub a, b 
 	cpl
 	inc a
-	and a, 0x1f
 	ld [wWorldPos+1], a
+	; "smear" reg b:
 	ld b, a
+	and a, $10
+	jp z, .no_smear
+	ld a, b
+	or a, $e0
+	ld b, a
+	.no_smear:
 
 	ld a, [wWorldPos]
 	add a, b
 	ld [wWorldPos], a
 	
 	call WaitVBlank
-	;TODO: assume screen moving DOWN. i.e: rSCY/8 > a
+	;TODO: assume screen moving UP. i.e: rSCY/8 < a
 	; calculate destination:
 	;    put the new tiles 18 rows ahead of SCY
-	add a, 18
+	ld a, [rSCY]
+	srl a
+	srl a
+	srl a
+	add a, 0
 	and a, $1F ; (a + 18 mod 32)
 	ld c, a
 	shift5
@@ -387,7 +405,7 @@ handleScreenGen:
 	ld a, [wWorldPos]
 	ld c, a
 	shift5
-	ld hl, TileMap + $20 * 18
+	ld hl, TileMap
 	add hl, bc
 	ld d, h
 	ld e, l
