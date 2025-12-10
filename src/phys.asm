@@ -357,14 +357,16 @@ handleScreenGen:
 	ld b, a
 	ld a, [wWorldPos]
 	and a, 0x1f
-	cp a, b
+	sub a, b
 	ret z
-	ld [wWorldPos+1], a
-
-	; TODO: assuming moving by 1
-	; need to calculate the step size
-	ld a, [wWorldPos]
+	cpl
 	inc a
+	and a, 0x1f
+	ld [wWorldPos+1], a
+	ld b, a
+
+	ld a, [wWorldPos]
+	add a, b
 	ld [wWorldPos], a
 	
 	;TODO: assume screen moving DOWN. i.e: rSCY/8 > a
