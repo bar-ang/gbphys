@@ -394,8 +394,7 @@ handleScreenGen:
 	ld e, l
 	pop hl
 
-
-	ld bc, 32
+	ld bc, 32 ; TODO: currently assuming just one step of SCY
 	call Memcpy
 
 	ret
