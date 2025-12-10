@@ -343,7 +343,7 @@ Process:
 	call handleScreenGen
 		
 	;debug printing
-	ld hl, Player
+	ld hl, wWorldPos
 	call LoadBytesTiles
 
 	jp Process
@@ -359,6 +359,7 @@ handleScreenGen:
 	and a, 0x1f
 	cp a, b
 	ret z
+	ld [wWorldPos+1], a
 
 	; TODO: assuming moving by 1
 	; need to calculate the step size
@@ -627,6 +628,7 @@ SECTION "Attributes", WRAM0
 	wJumpMath: db
 	wEnemyMath: db
 	wWorldPos: db
+	dw
 	
 	; this byte will use as a collection of 1-byte flags:
 	; bit 0 - indicates if the player OAM should be updated
