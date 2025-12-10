@@ -78,14 +78,13 @@ Init:
 	ld bc, EndObjects - Objects
 	call Memcpy
 
-	DEF startingWorldPos = 100-18
-	; NOTE: wWorldPos must ALWAYS be a multiple of rSCY/8 !
+	DEF startingWorldPos = 96-18
 	ld a, startingWorldPos
 	ld [wWorldPos], a
 
 	ld de, TileMap + $20 * startingWorldPos
-	ld hl, $9800
-	ld bc, $400
+	ld hl, $9800 + 32*(startingWorldPos % 32)
+	ld bc, 32 * 18
 	call Memcpy
 
 
@@ -152,7 +151,7 @@ Init:
 	;moving the screen to bottom-left corner
 	ld a, 0
 	ld [rSCX], a
-	ld a, 0
+	ld a, (startingWorldPos * 8) & $ff
 	ld [rSCY], a
 
 	ld a, 0
