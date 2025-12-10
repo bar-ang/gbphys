@@ -371,8 +371,10 @@ handleScreenGen:
 	ld [wWorldPos], a
 	
 	;TODO: assume screen moving DOWN. i.e: rSCY/8 > a
+	; calculate destination:
+	;    put the new tiles 18 rows ahead of SCY
 	add a, 18
-	and a, $1F
+	and a, $1F ; (a + 18 mod 32)
 	ld c, a
 	shift5
 
@@ -381,6 +383,9 @@ handleScreenGen:
 	add hl, bc
 	push hl
 
+	; calculate source:
+	;   we should take from Tilemap row in
+	;   position wWorldPos+18
 	ld a, [wWorldPos]
 	ld c, a
 	shift5
