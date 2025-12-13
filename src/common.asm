@@ -122,7 +122,7 @@ ENDM
 
 ; @param  number in c
 ; @return  bc := (c << 5)
-MACRO shift5
+MACRO mul32
 	ld a, c
 	srl a
 	srl a
