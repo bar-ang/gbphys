@@ -335,7 +335,6 @@ Process:
 
 	
 	call RunHDMA
-	call LoadMoreMap
 	
 	;debug printing
 	ld hl, Player
@@ -375,6 +374,20 @@ adjustScreenPos:
 	ld a, [Player + O_Y]
 	sub a, 108
 	ld [rSCY], a
+
+	; check if adding more screen is needed
+	div8 [Player + O_Y]
+	ld b, a
+	ld a, [wPrevPlayerPos]
+	cp a, b
+	ret c ;
+	ret z ; return if Player_Y/8 => wPrevPlayerPos
+
+	div8 [Player + O_Y]
+	ld [wPrevPlayerPos], a
+	
+	call LoadMoreMap
+	
 	ret
 
 ; @return: set in A the enemy address (with 'Enemies' subtracted to save 1 byte)
