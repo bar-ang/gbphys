@@ -135,6 +135,16 @@ MACRO mul32
 	ld c, a
 ENDM
 
+; @param the number to devide
+; @return result in reg a
+MACRO div8
+	ld a, \1
+	srl a
+	srl a
+	srl a
+ENDM
+	
+
 
 SECTION "OAM Transfer", WRAM0, ALIGN[8]
 	wDMA: ds $100
