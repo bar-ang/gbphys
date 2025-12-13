@@ -13,17 +13,12 @@ DEF MOVE_STATE_JUMP  EQU 1
 DEF MOVE_STATE_DYING EQU 2
 DEF MOVE_STATE_DEAD  EQU 3
 
-DEF O_Y     EQU 0
-DEF O_X     EQU 1
-DEF O_TILE  EQU 2
-DEF O_FLAGS EQU 3
-
 
 DEF MAPSIZE EQU ((EndTileMap - TileMap)/32)
 DEF MAP_LOAD_AT_START EQU 18
 
 MACRO set_player
-	ld [Player + \1], a
+	ld [Player.\1], a
 	ld e, a
 	ld a, [wOAMupdateRequired]
 	or a, 1
@@ -43,9 +38,9 @@ MACRO jump_math
 	add hl, bc
 	ld a, [hl]
 	ld b, a
-	ld a, [Player + O_Y]
+	ld a, [Player.y]
 	sub a, b
-	set_player O_Y
+	set_player y
 
 	ld a, c; note that c == [wJumpMath]
 	cp a, PseudoParabola.maximum - PseudoParabola
@@ -55,6 +50,22 @@ MACRO jump_math
 	call TestFloorCollision
 	jp nz, \1
 ENDM
+
+SECTION "Characters", WRAM0
+	Player:
+		.y: db
+		.x: db
+		.tile: db
+		.flags: db
+	Enemies:
+		.y: db
+		.x: db
+		.tile: db
+		.flags: db
+		.others: ds (@ - Enemies) * (NUM_ENEMIES-1)
+	EndEnemies:
+
+DEF ENEMY EQU (Enemies.others - Enemies)
 
 SECTION "Header", ROM0[$100]
 	jp Init
@@ -106,12 +117,12 @@ Init:
 	dma_to_hram
 
 	ld a, SPAWN_X
-	ld [Player + O_X], a
+	ld [Player.x], a
 	ld a, SPAWN_Y
-	ld [Player + O_Y], a
+	ld [Player.y], a
 	ld a, 0
-	ld [Player + O_TILE], a
-	ld [Player + O_FLAGS], a
+	ld [Player.tile], a
+	ld [Player.flags], a
 
 	;spawn enemies
 	ld b, NUM_ENEMIES
@@ -206,9 +217,9 @@ Process:
 		add hl, bc
 		ld a, [hl]
 		ld b, a
-		ld a, [Enemies + 4 * i + O_X]
+		ld a, [ENEMY*i + Enemies.x]
 		add a, b
-		ld [Enemies + 4 * i + O_X], a
+		ld [ENEMY*i + Enemies.x], a
 
 		; move on Y axis
 		ld a, [wEnemyMath]
@@ -218,9 +229,9 @@ Process:
 		add hl, bc
 		ld a, [hl]
 		ld b, a
-		ld a, [Enemies + 4 * i + O_Y]
+		ld a, [ENEMY*i + Enemies.y]
 		add a, b
-		ld [Enemies + 4 * i + O_Y], a
+		ld [ENEMY*i + Enemies.y], a
 
 		DEF i += 1
 	ENDR
@@ -255,16 +266,16 @@ Process:
 	call TestWallCollisionGoingLeft
 	jp z, .post_left
 	
-	ld a, [Player + O_X]
+	ld a, [Player.x]
 	dec a
-	set_player O_X
+	set_player x
 
 	ld a, [wNewKeys]
 	and a, PADF_LEFT
 	jp z, .post_left
-	ld a, [Player + O_FLAGS]
+	ld a, [Player.flags]
 	or a, 0x20
-	set_player O_FLAGS
+	set_player flags
 	.post_left:
 
 	; Right
@@ -276,16 +287,16 @@ Process:
 	call TestWallCollisionGoingRight
 	jp z, .post_right
 	
-	ld a, [Player + O_X]
+	ld a, [Player.x]
 	inc a
-	set_player O_X
+	set_player x
 	
 	ld a, [wNewKeys]
 	and a, PADF_RIGHT
 	jp z, .post_right
-	ld a, [Player + O_FLAGS]
+	ld a, [Player.flags]
 	and a, 0xDF
-	set_player O_FLAGS
+	set_player flags
 	.post_right:
 
 
@@ -309,9 +320,9 @@ Process:
 	ld a, [wFrame]
 	and a, 0x7
 	jp nz, .post_animate
-	ld a, [Player + O_TILE]
+	ld a, [Player.tile]
 	xor a, 1
-	set_player O_TILE
+	set_player tile
 	.post_animate:
 
 	
@@ -340,7 +351,7 @@ Process:
 	jp Process
 
 adjustScreenPos:
-	ld a, [Player + O_Y]
+	ld a, [Player.y]
 	sub a, 108
 	jp nc, .no_edge_top
 	ld a, 0
@@ -358,9 +369,9 @@ TestEnemyCollision:
 	DEF i = 0
 	REPT NUM_ENEMIES
 		; NOTE: enemy size: 8x8, player size: 16x16
-		ld a, [Enemies + 4*i + O_X]
+		ld a, [ENEMY*i + Enemies.x]
 		ld b, a
-		ld a, [Player + O_X]
+		ld a, [Player.x]
 
 		add a, 8 + 4
 		cp a, b
@@ -370,9 +381,9 @@ TestEnemyCollision:
 		cp a, b
 		jp nc, .no_collision\@
 
-		ld a, [Enemies + 4*i + O_Y]
+		ld a, [ENEMY*i + Enemies.y]
 		ld b, a
-		ld a, [Player + O_Y]
+		ld a, [Player.y]
 
 		add a, 8 - 8
 		cp a, b
@@ -394,10 +405,10 @@ TestEnemyCollision:
 
 TestFloorCollision:
 	ld hl, Player
-	ld a, [Player + O_X]
+	ld a, [Player.x]
 	add a, 8
 	ld b, a
-	ld a, [Player + O_Y]
+	ld a, [Player.y]
 	add a, 5
 	ld c, a
 	call GetTilePos
@@ -407,10 +418,10 @@ TestFloorCollision:
 
 TestWallCollisionGoingLeft:
 	ld hl, Player
-	ld a, [Player + O_X]
+	ld a, [Player.x]
 	sub a, 1
 	ld b, a
-	ld a, [Player + O_Y]
+	ld a, [Player.y]
 	ld c, a
 	call GetTilePos
 	call GetTile
@@ -419,10 +430,10 @@ TestWallCollisionGoingLeft:
 
 TestWallCollisionGoingRight:
 	ld hl, Player
-	ld a, [Player + O_X]
+	ld a, [Player.x]
 	add a, 16
 	ld b, a
-	ld a, [Player + O_Y]
+	ld a, [Player.y]
 	ld c, a
 	call GetTilePos
 	call GetTile
@@ -433,14 +444,14 @@ changeStateREST:
 	ld a, MOVE_STATE_REST
 	ld [wMoveState], a
 	ld a, PLAYER_WALK
-	ld [Player + O_TILE], a
+	ld [Player.tile], a
 	ret
 
 StartFalling:
 	ld a, MOVE_STATE_JUMP
 	ld [wMoveState], a
 	ld a, PLAYER_JUMP
-	set_player O_TILE
+	set_player tile
 	ld a, PseudoParabola.maximum - PseudoParabola + 4
 	ld [wJumpMath], a
 	ret
@@ -449,7 +460,7 @@ changeStateJUMP:
 	ld a, MOVE_STATE_JUMP
 	ld [wMoveState], a
 	ld a, PLAYER_JUMP
-	set_player O_TILE
+	set_player tile
 	ld a, 0
 	ld [wJumpMath], a
 	ret
@@ -458,10 +469,10 @@ changeStateDYING:
 	ld a, MOVE_STATE_DYING
 	ld [wMoveState], a
 	ld a, PLAYER_WALK
-	ld [Player + O_TILE], a
-	ld a, [Player + O_FLAGS]
+	ld [Player.tile], a
+	ld a, [Player.flags]
 	or a, $40
-	set_player O_FLAGS
+	set_player flags
 	ld a, PseudoParabola.maximum - PseudoParabola + 4
 	ld [wJumpMath], a
 	ret
@@ -473,7 +484,7 @@ changeStateDEAD:
 
 UpdatePlayerOAM:
 	ld hl, wDMA
-	ld a, [Player + O_FLAGS]
+	ld a, [Player.flags]
 	and a, 0x20
 	swap a
 	sla a
@@ -481,7 +492,7 @@ UpdatePlayerOAM:
 	ld e, a ; now e contains 8 if object is flipped vertically or 0 otherwise
 	; e will be used all throughout 'UpdateOAM' so don't override it!
 
-	ld a, [Player + O_FLAGS]
+	ld a, [Player.flags]
 	and a, 0x40
 	swap a
 	sla a
@@ -494,7 +505,7 @@ UpdatePlayerOAM:
 		; Y coord = player.Y - SCY
 		ld a, [rSCY]
 		ld b, a
-		ld a, [Player + O_Y]
+		ld a, [Player.y]
 		sub a, b
 		add a, Y_OFFSET
 		sub a, 8*(i / 2)
@@ -505,7 +516,7 @@ UpdatePlayerOAM:
 		ENDC
 		ld [hli], a
 		; X coord = player.X - SCX
-		ld a, [Player + O_X]
+		ld a, [Player.x]
 		add a, X_OFFSET
 		add a, 8*(i % 2)
 		IF i % 2 == 0
@@ -515,7 +526,7 @@ UpdatePlayerOAM:
 		ENDC
 		ld [hli], a
 		; Tile ID
-		ld a, [Player + O_TILE]
+		ld a, [Player.tile]
 		IF i == 0
 			add a, 8
 		ELIF i == 1
@@ -528,7 +539,7 @@ UpdatePlayerOAM:
 			
 		ld [hli], a
 		;Flags
-		ld a, [Player + O_FLAGS]
+		ld a, [Player.flags]
 		ld [hli], a
 		
 
@@ -542,17 +553,17 @@ UpdateEnemiesOAM:
 		ld hl, wDMA + 16 + 4 * i
 		ld a, [rSCY]
 		ld b, a
-		ld a, [Enemies + 4 * i + O_Y]
+		ld a, [ENEMY*i + Enemies.y]
 		add a, Y_OFFSET
 		sub a, b
 		ld [hli], a
 
-		ld a, [Enemies + 4 * i + O_X]
+		ld a, [ENEMY*i + Enemies.x]
 		add a, X_OFFSET
 		ld [hli], a
-		ld a, [Enemies + 4 * i + O_TILE]
+		ld a, [ENEMY*i + Enemies.tile]
 		ld [hli], a
-		ld a, [Enemies + 4 * i + O_FLAGS]
+		ld a, [ENEMY*i + Enemies.flags]
 		ld [hli], a
 
 		DEF i += 1
@@ -560,17 +571,15 @@ UpdateEnemiesOAM:
 	ret
 
 PlayerTranslate:
-	ld a, [Player + O_X]
+	ld a, [Player.x]
 	add a, b
-	ld [Player + O_X], a
-	ld a, [Player + O_Y]
+	ld [Player.x], a
+	ld a, [Player.y]
 	add a, c
-	ld [Player + O_Y], a
+	ld [Player.y], a
 	ret
 
 SECTION "Attributes", WRAM0
-	Player: ds 4
-	Enemies: ds (EndEnemiesSpawnData - EnemiesSpawnData)
 	wJumpMath: db
 	wEnemyMath: db
 	
