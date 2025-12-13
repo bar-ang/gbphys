@@ -143,7 +143,18 @@ MACRO div8
 	srl a
 	srl a
 ENDM
-	
+
+; @param: if bc is a sign number, calculate its negative
+; @return: in-place
+MACRO neg
+	ld a, b
+	cpl
+	ld b, a
+	ld a, c
+	cpl
+	ld c, a
+	inc bc
+ENDM
 
 
 SECTION "OAM Transfer", WRAM0, ALIGN[8]
