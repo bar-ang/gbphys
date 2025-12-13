@@ -19,6 +19,8 @@ DEF O_TILE  EQU 2
 DEF O_FLAGS EQU 3
 
 
+DEF MAPSIZE EQU ((EndTileMap - TileMap)/32)
+
 MACRO set_player
 	ld [Player + \1], a
 	ld e, a
