@@ -153,6 +153,9 @@ Init:
 	ld a, 111
 	ld [rSCY], a
 
+	ld a, MAPSIZE-18
+	ld [wMinMapLoaded], a
+
 	ld a, 0
 	ld [wEnemyMath], a
 	
@@ -574,6 +577,7 @@ SECTION "Attributes", WRAM0
 	; bit 0 - indicates if the player OAM should be updated
 	; bit 1 - indicates if the enemies OAM shoud be updated
 	wOAMupdateRequired: db
+	wMinMapLoaded: db
 
 	; 0 - rest
 	; 1 - jump
