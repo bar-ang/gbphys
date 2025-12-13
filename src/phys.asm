@@ -56,6 +56,10 @@ MACRO jump_math
 	jp nz, \1
 ENDM
 
+SECTION "Characters", WRAM0
+	Player: ds 4
+	Enemies: ds (EndEnemiesSpawnData - EnemiesSpawnData)
+
 SECTION "Header", ROM0[$100]
 	jp Init
 	ds $150 - @, 0 ; Make room for the header
@@ -569,8 +573,6 @@ PlayerTranslate:
 	ret
 
 SECTION "Attributes", WRAM0
-	Player: ds 4
-	Enemies: ds (EndEnemiesSpawnData - EnemiesSpawnData)
 	wJumpMath: db
 	wEnemyMath: db
 	
