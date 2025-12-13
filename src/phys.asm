@@ -335,12 +335,41 @@ Process:
 
 	
 	call RunHDMA
-		
+	call LoadMoreMap
+	
 	;debug printing
 	ld hl, Player
 	call LoadBytesTiles
 
 	jp Process
+
+LoadMoreMap:
+	ld a, [wMinMapLoaded]
+	inc a
+	ld [wMinMapLoaded], a
+
+	ld c, a
+	mul32
+	neg
+
+	ld hl, EndTileMap
+	add hl, bc
+	ld d, h
+	ld e, l
+
+	ld a, b   ;
+	and a, 3  ;
+	or a, -4 ; this calculates: bc mod $400
+	ld b, a   ; remember that bc is negative
+	
+	ld hl, $9c00
+	add hl, bc
+
+	ld bc, 32
+	call WaitVBlank
+	call Memcpy
+
+	ret
 
 adjustScreenPos:
 	ld a, [Player + O_Y]
