@@ -20,6 +20,7 @@ DEF O_FLAGS EQU 3
 
 
 DEF MAPSIZE EQU ((EndTileMap - TileMap)/32)
+DEF MAP_LOAD_AT_START EQU 18
 
 MACRO set_player
 	ld [Player + \1], a
@@ -81,9 +82,9 @@ Init:
 	call Memcpy
 
 
-	ld de, EndTileMap - $400
-	ld hl, $9800
-	ld bc, $400
+	ld de, EndTileMap - MAP_LOAD_AT_START*32
+	ld hl, $9c00 - MAP_LOAD_AT_START*32
+	ld bc, MAP_LOAD_AT_START*32
 	call Memcpy
 
 
@@ -153,7 +154,7 @@ Init:
 	ld a, 111
 	ld [rSCY], a
 
-	ld a, MAPSIZE-18
+	ld a, MAP_LOAD_AT_START
 	ld [wMinMapLoaded], a
 
 	ld a, 0
