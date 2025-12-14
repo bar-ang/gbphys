@@ -156,6 +156,23 @@ MACRO neg
 	inc bc
 ENDM
 
+; @param:
+;    (1) address to 16-bit number
+;    (2) 8-bit number to add in reg b
+; @return: in-place
+MACRO add16
+	ld a, [\1]
+	add a, b
+	ld e, f
+	ld [\1], a
+	ld a, e
+	and a, 0x10
+	swap a
+	ld b, a
+	ld a, [\1 + 1]
+	add a, b
+	ld [\1 + 1], a
+ENDM
 
 SECTION "OAM Transfer", WRAM0, ALIGN[8]
 	wDMA: ds $100
