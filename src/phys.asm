@@ -96,6 +96,15 @@ MACRO changeStateREST
 	ld [Player.tile], a
 ENDM
 
+MACRO StartFalling
+	ld a, MOVE_STATE_JUMP
+	ld [wMoveState], a
+	ld a, PLAYER_JUMP
+	set_player tile
+	ld a, PseudoParabola.maximum - PseudoParabola + 4
+	ld [wJumpMath], a
+ENDM
+
 MACRO changeStateJUMP
 	ld a, MOVE_STATE_JUMP
 	ld [wMoveState], a
@@ -228,7 +237,7 @@ Init:
 
 	call InitKeys
 
-	call StartFalling
+	StartFalling
 
 	;moving the screen to bottom-left corner
 	ld a, 0
@@ -264,7 +273,7 @@ Process:
 		; if there's no floor below, fall
 		TestFloorCollision
 		jp z, .post_switch
-		call StartFalling
+		StartFalling
 		jp .post_switch
 	.jump:
 		jump_math .post_switch
@@ -472,15 +481,6 @@ TestEnemyCollision:
 	ENDR
 
 	ld a, $ff
-	ret
-
-StartFalling:
-	ld a, MOVE_STATE_JUMP
-	ld [wMoveState], a
-	ld a, PLAYER_JUMP
-	set_player tile
-	ld a, PseudoParabola.maximum - PseudoParabola + 4
-	ld [wJumpMath], a
 	ret
 
 UpdatePlayerOAM:
