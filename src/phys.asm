@@ -47,8 +47,46 @@ MACRO jump_math
 	jp c, \1
 
 	; switch to REST if hitting the ground
-	call TestFloorCollision
+	TestFloorCollision
 	jp nz, \1
+ENDM
+
+MACRO TestFloorCollision
+	ld hl, Player
+	ld a, [Player.x]
+	add a, 8
+	ld b, a
+	ld a, [Player.y]
+	add a, 5
+	ld c, a
+	GetTilePos
+	GetTile
+	cp a, FLOOR_VRAM
+ENDM
+
+MACRO TestWallCollisionGoingLeft
+	ld hl, Player
+	ld a, [Player.x]
+	sub a, 1
+	ld b, a
+	ld a, [Player.y]
+	ld c, a
+	GetTilePos
+	GetTile
+	cp a, WALL_VRAM
+ENDM
+
+
+MACRO TestWallCollisionGoingRight
+	ld hl, Player
+	ld a, [Player.x]
+	add a, 16
+	ld b, a
+	ld a, [Player.y]
+	ld c, a
+	GetTilePos
+	GetTile
+	cp a, WALL_VRAM
 ENDM
 
 SECTION "Characters", WRAM0
@@ -190,7 +228,7 @@ Process:
 
 	.rest:
 		; if there's no floor below, fall
-		call TestFloorCollision
+		TestFloorCollision
 		jp z, .post_switch
 		call StartFalling
 		jp .post_switch
@@ -262,7 +300,7 @@ Process:
 	jp z, .post_left
 
 	; if there's a wall, don't move
-	call TestWallCollisionGoingLeft
+	TestWallCollisionGoingLeft
 	jp z, .post_left
 	
 	ld a, [Player.x]
@@ -283,7 +321,7 @@ Process:
 	jp z, .post_right
 
 	; if there's a wall, don't move
-	call TestWallCollisionGoingRight
+	TestWallCollisionGoingRight
 	jp z, .post_right
 	
 	ld a, [Player.x]
@@ -400,43 +438,6 @@ TestEnemyCollision:
 	ENDR
 
 	ld a, $ff
-	ret
-
-TestFloorCollision:
-	ld hl, Player
-	ld a, [Player.x]
-	add a, 8
-	ld b, a
-	ld a, [Player.y]
-	add a, 5
-	ld c, a
-	GetTilePos
-	GetTile
-	cp a, FLOOR_VRAM
-	ret
-
-TestWallCollisionGoingLeft:
-	ld hl, Player
-	ld a, [Player.x]
-	sub a, 1
-	ld b, a
-	ld a, [Player.y]
-	ld c, a
-	GetTilePos
-	GetTile
-	cp a, WALL_VRAM
-	ret
-
-TestWallCollisionGoingRight:
-	ld hl, Player
-	ld a, [Player.x]
-	add a, 16
-	ld b, a
-	ld a, [Player.y]
-	ld c, a
-	GetTilePos
-	GetTile
-	cp a, WALL_VRAM
 	ret
 
 changeStateREST:
