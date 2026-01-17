@@ -322,9 +322,6 @@ Process:
 adjustScreenPos:
 	ld a, [Player.y]
 	sub a, 108
-	jp nc, .no_edge_top
-	ld a, 0
-	.no_edge_top:
 	cp a, 112
 	jp c, .no_edge_bottom
 	ld a, 111
