@@ -455,6 +455,7 @@ SECTION "Attributes", WRAM0
 	; this byte will use as a collection of 1-byte flags:
 	; bit 0 - indicates if the player OAM should be updated
 	; bit 1 - indicates if the enemies OAM shoud be updated
+	; bit 2 - map scrolling required
 	wOAMupdateRequired: db
 	wMinMapLoaded: db
 	wPrevSCY: db ; (divided by 8)
