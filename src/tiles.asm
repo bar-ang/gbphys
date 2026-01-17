@@ -82,15 +82,12 @@ EndTileMap:
 
 SECTION "Data", ROM0
 
-DEF NUM_ENEMIES EQU 5
+DEF NUM_ENEMIES EQU 1
 
 EnemiesSpawnData:
-; each enemy has 3 bytes:
+; each enemy has 4 bytes:
 ; y pos, x pos (wordly, not on screen), type (tile ID), flags
 ; '.single' label is used to calcute the size of each enemy
-        db $bf, $90, ENEMY_ORAM, 0
-.single:db $c1, $11, ENEMY_ORAM, 0
-        db $df, $65, ENEMY_ORAM, 0
-        db $9f, $75, ENEMY_ORAM, 0
-        db $5f, $70, ENEMY_ORAM, 0
+        db $bf, $20, ENEMY_ORAM, 0
+.single:
 EndEnemiesSpawnData:
