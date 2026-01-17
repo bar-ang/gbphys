@@ -16,7 +16,7 @@ DEF MOVE_STATE_DEAD  EQU 3
 
 
 DEF MAPSIZE EQU ((EndTileMap - TileMap)/32)
-DEF MAP_LOAD_AT_START EQU 18
+DEF MAP_LOAD_AT_START EQU 20
 
 
 SECTION "Characters", WRAM0
@@ -331,7 +331,6 @@ adjustScreenPos:
 	.no_edge_bottom:
 	ld [rSCY], a
 
-	call WaitVBlank
 	ld a, [rSCY]
 	; --- map scrolling logic ---
 	srl a
