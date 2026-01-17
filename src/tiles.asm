@@ -74,7 +74,7 @@ ASCII:
 EndASCII:
 
 
-SECTION "Tilemap", ROM0
+SECTION "Tilemap", ROM0, ALIGN[8]
 
 TileMap:
         INCLUDE "assets/tilemap.asm"

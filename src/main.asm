@@ -341,6 +341,26 @@ adjustScreenPos:
 	ld a, b
 	ld [wPrevSCY], a
 
+	; set in DE the ROM addr to load from
+	ld a, [wMinMapLoaded]
+	dec a
+	ld [wMinMapLoaded], a
+	cpl
+	inc a
+	add a, MAPSIZE
+	ld c, a
+	mul32
+
+
+	ld a, HIGH(TileMap)
+	add a, b
+	ld d, a
+	ld e, c
+;	ld de, EndTileMap - (MAP_LOAD_AT_START-2)*32
+	push de
+
+	; set in HL the vram addr to load to
+	ld a, [wPrevSCY]
 	dec a
 	ld c, a
 	mul32
@@ -349,9 +369,10 @@ adjustScreenPos:
 	ld a, $98
 	add a, h
 	ld h, a
-	ld d, -128
+
+	pop de
 	ld bc, 32
-	call Memset
+	call Memcpy
 
 	ret
 
