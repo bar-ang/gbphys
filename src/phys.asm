@@ -131,6 +131,15 @@ MACRO changeStateDEAD
 	ld [wMoveState], a
 ENDM
 
+MACRO PlayerTranslate
+	ld a, [Player.x]
+	add a, b
+	ld [Player.x], a
+	ld a, [Player.y]
+	add a, c
+	ld [Player.y], a
+ENDM
+
 
 SECTION "Characters", WRAM0
 	Player:
@@ -571,14 +580,6 @@ UpdateEnemiesOAM:
 	ENDR
 	ret
 
-PlayerTranslate:
-	ld a, [Player.x]
-	add a, b
-	ld [Player.x], a
-	ld a, [Player.y]
-	add a, c
-	ld [Player.y], a
-	ret
 
 SECTION "Attributes", WRAM0
 	wJumpMath: db
