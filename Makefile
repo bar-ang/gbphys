@@ -5,6 +5,7 @@
 
 # Default game name (without extension)
 GAME ?= phys
+MAIN ?= main
 
 # ----------------------------------------
 # Directories
@@ -41,7 +42,7 @@ all: $(TARGET).gb
 # ----------------------------------------
 $(TARGET).o: $(ALL_INPUTS)
 	@mkdir -p $(BUILD_DIR)
-	$(RGBASM) -o $@ $(SRC_DIR)/$(GAME).asm
+	$(RGBASM) -o $@ $(SRC_DIR)/$(MAIN).asm
 
 
 $(TARGET).gb: $(TARGET).o
