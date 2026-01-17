@@ -89,6 +89,40 @@ MACRO TestWallCollisionGoingRight
 	cp a, WALL_VRAM
 ENDM
 
+MACRO changeStateREST
+	ld a, MOVE_STATE_REST
+	ld [wMoveState], a
+	ld a, PLAYER_WALK
+	ld [Player.tile], a
+ENDM
+
+MACRO changeStateJUMP
+	ld a, MOVE_STATE_JUMP
+	ld [wMoveState], a
+	ld a, PLAYER_JUMP
+	set_player tile
+	ld a, 0
+	ld [wJumpMath], a
+ENDM
+
+MACRO changeStateDYING
+	ld a, MOVE_STATE_DYING
+	ld [wMoveState], a
+	ld a, PLAYER_WALK
+	ld [Player.tile], a
+	ld a, [Player.flags]
+	or a, $40
+	set_player flags
+	ld a, PseudoParabola.maximum - PseudoParabola + 4
+	ld [wJumpMath], a
+ENDM
+
+MACRO changeStateDEAD
+	ld a, MOVE_STATE_DEAD
+	ld [wMoveState], a
+ENDM
+
+
 SECTION "Characters", WRAM0
 	Player:
 		.y: db
@@ -235,11 +269,11 @@ Process:
 	.jump:
 		jump_math .post_switch
 		; 'jump_math' will jump to .post_switch unless hitting the ground
-		call changeStateREST
+		changeStateREST
 		jp .post_switch
 	.dying:
 		jump_math .post_switch
-		call changeStateDEAD
+		changeStateDEAD
 	.post_switch:
 
 	; making the enemies move
@@ -284,7 +318,7 @@ Process:
 	call TestEnemyCollision
 	cp a, $ff
 	jp z, .still_alive
-	call changeStateDYING
+	changeStateDYING
 	.still_alive:
 	
 	; handle keyboard input
@@ -346,7 +380,7 @@ Process:
 	and a, PADF_UP
 	jp z, .post_up
 	
-	call changeStateJUMP
+	changeStateJUMP
 	.post_up:
 
 	; animate the player
@@ -440,13 +474,6 @@ TestEnemyCollision:
 	ld a, $ff
 	ret
 
-changeStateREST:
-	ld a, MOVE_STATE_REST
-	ld [wMoveState], a
-	ld a, PLAYER_WALK
-	ld [Player.tile], a
-	ret
-
 StartFalling:
 	ld a, MOVE_STATE_JUMP
 	ld [wMoveState], a
@@ -454,32 +481,6 @@ StartFalling:
 	set_player tile
 	ld a, PseudoParabola.maximum - PseudoParabola + 4
 	ld [wJumpMath], a
-	ret
-
-changeStateJUMP:
-	ld a, MOVE_STATE_JUMP
-	ld [wMoveState], a
-	ld a, PLAYER_JUMP
-	set_player tile
-	ld a, 0
-	ld [wJumpMath], a
-	ret
-
-changeStateDYING:
-	ld a, MOVE_STATE_DYING
-	ld [wMoveState], a
-	ld a, PLAYER_WALK
-	ld [Player.tile], a
-	ld a, [Player.flags]
-	or a, $40
-	set_player flags
-	ld a, PseudoParabola.maximum - PseudoParabola + 4
-	ld [wJumpMath], a
-	ret
-
-changeStateDEAD:
-	ld a, MOVE_STATE_DEAD
-	ld [wMoveState], a
 	ret
 
 UpdatePlayerOAM:
