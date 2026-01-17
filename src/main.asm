@@ -330,6 +330,33 @@ adjustScreenPos:
 	ld a, 111
 	.no_edge_bottom:
 	ld [rSCY], a
+
+	call WaitVBlank
+	ld a, [rSCY]
+	; --- map scrolling logic ---
+	srl a
+	srl a
+	srl a
+	ld b, a
+	ld a, [wPrevSCY]
+	cp a, b
+	ret z ; TODO: expect this to throw random stuff on screen if is scrolled DOWN!
+	
+	ld a, b
+	ld [wPrevSCY], a
+
+	dec a
+	ld c, a
+	mul32
+	ld h, b
+	ld l, c
+	ld a, $98
+	add a, h
+	ld h, a
+	ld d, -128
+	ld bc, 32
+	call Memset
+
 	ret
 
 ; @return: set in A the enemy address (with 'Enemies' subtracted to save 1 byte)
