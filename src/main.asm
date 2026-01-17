@@ -299,7 +299,7 @@ Process:
 	ld a, [wOAMupdateRequired]
 	and a, 1
 	jp z, .player_no_oam_update
-	adjustScreenPos
+	call adjustScreenPos
 	call UpdatePlayerOAM
 	.player_no_oam_update:
 	
@@ -318,6 +318,19 @@ Process:
 	call LoadBytesTiles
 
 	jp Process
+
+adjustScreenPos:
+	ld a, [Player.y]
+	sub a, 108
+	jp nc, .no_edge_top
+	ld a, 0
+	.no_edge_top:
+	cp a, 112
+	jp c, .no_edge_bottom
+	ld a, 111
+	.no_edge_bottom:
+	ld [rSCY], a
+	ret
 
 ; @return: set in A the enemy address (with 'Enemies' subtracted to save 1 byte)
 ;      if no collision then set: A=$ff
