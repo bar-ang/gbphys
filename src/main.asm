@@ -7,7 +7,7 @@ INCLUDE "src/macroland.asm"
 INCLUDE "assets/pseudo_math.asm"
 
 DEF SPAWN_X    EQU $40
-DEF SPAWN_Y    EQU $d0
+DEF SPAWN_Y    EQU $e0
 
 DEF MOVE_STATE_REST  EQU 0
 DEF MOVE_STATE_JUMP  EQU 1
@@ -314,7 +314,7 @@ Process:
 	call RunHDMA
 		
 	;debug printing
-	ld hl, Player
+	ld hl, wPrevSCY
 	call LoadBytesTiles
 
 	jp Process
