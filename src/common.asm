@@ -49,24 +49,6 @@ ClearWorkDMA:
         call Memset
         ret
 
-; @param hl - obj address
-; @param b - x coord
-; @param c - y coord
-; @param d - tile ID
-; @param e - flags
-CreateObj:
-        ld a, c
-        add a, Y_OFFSET
-        ld [hli], a
-        ld a, b
-        add a, X_OFFSET
-        ld [hli], a
-        ld a, d
-        ld [hli], a
-        ld a, e
-        ld [hli], a
-        ret
-
 ; @param bc: x,y coord
 ; @return block position in bc reg
 GetTilePos:
