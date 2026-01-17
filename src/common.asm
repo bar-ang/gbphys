@@ -35,23 +35,23 @@ Memset:
         jp nz, Memset
         ret
         
-ClearOAM:
+MACRO ClearOAM
         ld de, 0
         ld hl, _OAMRAM
         ld bc, OAMSIZE
         call Memset
-        ret
+ENDM
 
-ClearWorkDMA:
+MACRO ClearWorkDMA
         ld de, 0
         ld hl, wDMA
         ld bc, OAMSIZE
         call Memset
-        ret
+ENDM
 
 ; @param bc: x,y coord
 ; @return block position in bc reg
-GetTilePos:
+MACRO GetTilePos
         ld d, b
         ld e, c
 
@@ -82,17 +82,16 @@ GetTilePos:
         sla a
         or a, d
         ld c, a
-        
-        ret
+ENDM
 
 ; @param bc - position
 ; @return tile in a reg
 ; @note Guarantee not to violate the value in BC!
-GetTile:
+MACRO GetTile
         ld hl, $9800
         add hl, bc
         ld a, [hl]
-        ret
+ENDM
 
 
 MACRO dma_to_hram

@@ -111,8 +111,8 @@ Init:
 		jp nz, .loop
 
 
-	call ClearOAM
-	call ClearWorkDMA
+	ClearOAM
+	ClearWorkDMA
 	dma_to_hram
 
 	ld a, SPAWN_X
@@ -410,8 +410,8 @@ TestFloorCollision:
 	ld a, [Player.y]
 	add a, 5
 	ld c, a
-	call GetTilePos
-	call GetTile
+	GetTilePos
+	GetTile
 	cp a, FLOOR_VRAM
 	ret
 
@@ -422,8 +422,8 @@ TestWallCollisionGoingLeft:
 	ld b, a
 	ld a, [Player.y]
 	ld c, a
-	call GetTilePos
-	call GetTile
+	GetTilePos
+	GetTile
 	cp a, WALL_VRAM
 	ret
 
@@ -434,8 +434,8 @@ TestWallCollisionGoingRight:
 	ld b, a
 	ld a, [Player.y]
 	ld c, a
-	call GetTilePos
-	call GetTile
+	GetTilePos
+	GetTile
 	cp a, WALL_VRAM
 	ret
 
