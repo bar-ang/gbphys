@@ -37,7 +37,7 @@ def main():
     matrix = image_to_matrix(sys.argv[1], color_map={
             (255, 255, 255): 0,
             (0, 0, 0):       1,
-            (15, 0, 255):    2
+            (0, 0, 255):    2
         }
     )
 
