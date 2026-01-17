@@ -75,17 +75,16 @@ Init:
 	; Shut down audio circuitry
 	ld a, 0
 	ld [rNR52], a
-
-        call WaitVBlank
+	call WaitVBlank
 
 	; Turn the LCD off
 	ld a, 0
 	ld [rLCDC], a
 
-        ld de, Tiles
-        ld hl, $9000
-        ld bc, EndTiles - Tiles
-        call Memcpy
+	ld de, Tiles
+	ld hl, $9000
+	ld bc, EndTiles - Tiles
+	call Memcpy
 
 	ld de, Objects
 	ld hl, $8000
