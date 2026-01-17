@@ -131,6 +131,8 @@ Init:
 	ld [rSCX], a
 	ld a, 111
 	ld [rSCY], a
+	ld a, 111/8
+	ld [wPrevSCY], a
 
 	ld a, MAP_LOAD_AT_START
 	ld [wMinMapLoaded], a
@@ -455,6 +457,7 @@ SECTION "Attributes", WRAM0
 	; bit 1 - indicates if the enemies OAM shoud be updated
 	wOAMupdateRequired: db
 	wMinMapLoaded: db
+	wPrevSCY: db ; (divided by 8)
 
 	; 0 - rest
 	; 1 - jump
