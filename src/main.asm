@@ -138,6 +138,9 @@ Init:
 	ld [wMinMapLoaded], a
 
 	ld a, 0
+	ld [wMapScrollActivated], a
+
+	ld a, 0
 	ld [wEnemyMath], a
 	
 Process:
@@ -471,7 +474,7 @@ SECTION "Attributes", WRAM0
 	wOAMupdateRequired: db
 	wMinMapLoaded: db
 	wPrevSCY: db ; (divided by 8)
-
+	wMapScrollActivated: db
 	; 0 - rest
 	; 1 - jump
 	; 2 - dead

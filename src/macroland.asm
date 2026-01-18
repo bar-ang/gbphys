@@ -27,6 +27,10 @@ MACRO jump_math
 	cp a, PseudoParabola.maximum - PseudoParabola
 	jp c, \1
 
+	; NOTE: map scrolling can only go up
+	ld a, 0
+	ld [wMapScrollActivated], a
+
 	; switch to REST if hitting the ground
 	TestFloorCollision
 	jp nz, \1
@@ -75,6 +79,8 @@ MACRO changeStateREST
 	ld [wMoveState], a
 	ld a, PLAYER_WALK
 	ld [Player.tile], a
+	ld a, 0
+	ld [wMapScrollActivated], a
 ENDM
 
 MACRO StartFalling
@@ -93,6 +99,8 @@ MACRO changeStateJUMP
 	set_player tile
 	ld a, 0
 	ld [wJumpMath], a
+	ld a, 1
+	ld [wMapScrollActivated], a
 ENDM
 
 MACRO changeStateDYING
@@ -105,6 +113,8 @@ MACRO changeStateDYING
 	set_player flags
 	ld a, PseudoParabola.maximum - PseudoParabola + 4
 	ld [wJumpMath], a
+	ld a, 0
+	ld [wMapScrollActivated], a
 ENDM
 
 MACRO changeStateDEAD
