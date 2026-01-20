@@ -36,8 +36,24 @@ SECTION "Characters", WRAM0
 DEF ENEMY EQU (Enemies.others - Enemies)
 
 SECTION "Header", ROM0[$100]
-	jp Init
+	jp Preprocess
 	ds $150 - @, 0 ; Make room for the header
+
+Preprocess:
+
+	; detecting hardware
+	; $11 = CGB
+	; otherwise = GB
+	and a
+	cp a, $11
+	jp nz, .classic_gb
+	ld a, 1
+	ld [wHardware], a
+	
+	jp Init
+	.classic_gb:
+	xor a
+	ld [wHardware], a
 
 Init:
 	; Shut down audio circuitry
@@ -514,6 +530,10 @@ UpdateEnemiesOAM:
 
 
 SECTION "Attributes", WRAM0
+	; Hardware:
+	; 0th bit idicates if GB (bit off) or CGB (bit on)
+	; rest of the bits are for now unused.
+	wHardware: db
 	wJumpMath: db
 	wEnemyMath: db
 	
