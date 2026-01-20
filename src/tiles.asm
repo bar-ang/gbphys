@@ -88,9 +88,9 @@ EnemiesSpawnData:
 ; each enemy has 3 bytes:
 ; y pos, x pos (wordly, not on screen), type (tile ID), flags
 ; '.single' label is used to calcute the size of each enemy
-        db $bf, $90, ENEMY_ORAM, 0
-.single:db $c1, $11, ENEMY_ORAM, 0
-        db $df, $65, ENEMY_ORAM, 0
-        db $9f, $75, ENEMY_ORAM, 0
-        db $5f, $70, ENEMY_ORAM, 0
+        db $8f, $78, ENEMY_ORAM, 0
+.single:db $a1, $11, ENEMY_ORAM, 0
+        db $df, $15, ENEMY_ORAM, 0
+        db $2f, $55, ENEMY_ORAM, 0
+        db $3f, $70, ENEMY_ORAM, 0
 EndEnemiesSpawnData:
