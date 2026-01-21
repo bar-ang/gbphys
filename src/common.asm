@@ -54,10 +54,23 @@ MACRO INIT_GBC_PALETTE
 	ld a, $80
 	ld [rBCPS], a
 
-  RGB_Set 0, 0, 31
-  RGB_Set 31, 0, 0
-  RGB_Set 31, 31, 0
+  ;sky palette
+  RGB_Set 3, 8, 30
+  RGB_Set 16, 16, 31
+  RGB_Set 15, 29, 31
+  RGB_Set 28, 28, 28
+
+  ;ground palette
+  RGB_Set 7, 31, 8
+  RGB_Set 1, 23, 1
+  RGB_Set 31, 19, 10
+  RGB_Set 31, 23, 17
+
+  ;wall palette
   RGB_Set 0, 0, 0
+  RGB_Set 10, 10, 10
+  RGB_Set 20, 20, 20
+  RGB_Set 30, 30, 30
 
 ENDM
 
