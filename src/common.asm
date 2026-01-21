@@ -34,7 +34,33 @@ Memset:
         or c
         jp nz, Memset
         ret
-        
+
+MACRO RGB_Set
+	ld a, ((\2) & $7)
+	swap a
+	sla a
+	or \1
+	ld [rBCPD], a
+
+	ld a, \3
+	sla a
+	sla a
+	or a, ((\2) >> 3)
+	ld [rBCPD], a
+ENDM
+
+MACRO INIT_GBC_PALETTE
+  ;NOTE Screen Must be off!
+	ld a, $80
+	ld [rBCPS], a
+
+  RGB_Set 0, 0, 31
+  RGB_Set 31, 0, 0
+  RGB_Set 31, 31, 0
+  RGB_Set 0, 0, 0
+
+ENDM
+
 MACRO ClearOAM
         ld de, 0
         ld hl, _OAMRAM
