@@ -84,6 +84,21 @@ Init:
 	ld bc, MAP_LOAD_AT_START*32
 	call Memcpy
 
+	; During the first (blank) frame, initialize display registers
+	ld a, [wHardware]
+	and a, 1
+	jp nz, .gbc_palette
+	ld a, %00011011
+	ld [rBGP], a
+	ld a, %00011110
+	ld [rOBP0], a
+	jp .finish_init_palette
+
+	.gbc_palette:
+		INIT_GBC_PALETTE
+
+	.finish_init_palette:
+	
 
 	ld b, NUMERAL_SIZE
 	ld d, -128
@@ -135,11 +150,6 @@ Init:
 	ld a, 144-8
 	ld [rWY], a
 
-	; During the first (blank) frame, initialize display registers
-	ld a, %00011011
-	ld [rBGP], a
-	ld a, %00011110
-	ld [rOBP0], a
 
 	call InitKeys
 
