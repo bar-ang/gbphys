@@ -78,11 +78,17 @@ Init:
 	ld bc, EndObjects - Objects
 	call Memcpy
 
+	DEF i=0
+	REPT 2
+		ld a, i
+		ld [rVBK], a
+		ld de, EndTileMap - MAP_LOAD_AT_START*32
+		ld hl, $9c00 - MAP_LOAD_AT_START*32
+		ld bc, MAP_LOAD_AT_START*32
+		call Memcpy
 
-	ld de, EndTileMap - MAP_LOAD_AT_START*32
-	ld hl, $9c00 - MAP_LOAD_AT_START*32
-	ld bc, MAP_LOAD_AT_START*32
-	call Memcpy
+		DEF i+=1
+	ENDR
 
 	; During the first (blank) frame, initialize display registers
 	ld a, [wHardware]
