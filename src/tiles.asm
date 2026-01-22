@@ -69,6 +69,42 @@ EndWallTiles:
 
 EndTiles:
 
+TilesGBC:
+BackgroundGBC:
+        dw `00000000
+        dw `00101010
+        dw `01101010
+        dw `20213101
+        dw `02131210
+        dw `10110101
+        dw `00010100
+        dw `00000000
+EndBackgroundGBC:
+
+FloorTilesGBC:
+        dw `13111111
+        dw `11111311
+        dw `10301010
+        dw `01010131
+        dw `00000000
+        dw `20202022
+        dw `22222222
+        dw `22222222
+EndFloorTilesGBC:
+
+WallTilesGBC:
+        dw `11233311
+        dw `11222311
+        dw `11233311
+        dw `11222311
+        dw `11233311
+        dw `11222311
+        dw `11233311
+        dw `11222311
+EndWallTilesGBC:
+
+EndTilesGBC:
+
 ASCII:
         INCBIN "assets/hexset.2bpp"
 EndASCII:
