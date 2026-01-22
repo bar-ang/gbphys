@@ -42,7 +42,7 @@ MACRO TestFloorCollision
 	add a, 8
 	ld b, a
 	ld a, [Player.y]
-	add a, 5
+	add a, 8
 	ld c, a
 	GetTilePos
 	GetTile
