@@ -39,7 +39,7 @@ SECTION "Header", ROM0[$100]
 	jp Preprocess
 	; Make room for the header
 	ds $143 - @, 0
-	db $80 ; Turn on CGB-Only Flag
+	db $80 ; Turn on CGB-or-DMG Flag
 	ds $150 - @, 0
 
 Preprocess:
