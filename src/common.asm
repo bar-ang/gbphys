@@ -64,7 +64,7 @@ MACRO INIT_GBC_PALETTE
   RGB_Set 7, 31, 8
   RGB_Set 1, 23, 1
   RGB_Set 31, 19, 10
-  RGB_Set 31, 23, 17
+  RGB_Set 28, 0, 20 ; flowers!
 
   ;wall palette
   RGB_Set 0, 0, 0
