@@ -68,9 +68,17 @@ Init:
 	ld a, 0
 	ld [rLCDC], a
 
+	ld a, [wHardware]
+	and a, 1
+	jp z, .load_tiles_gb
+	ld de, TilesGBC
+	ld bc, EndTilesGBC - TilesGBC
+	jp .copy_tiles
+	.load_tiles_gb:
 	ld de, Tiles
-	ld hl, $9000
 	ld bc, EndTiles - Tiles
+	.copy_tiles:
+	ld hl, $9000
 	call Memcpy
 
 	ld de, Objects
