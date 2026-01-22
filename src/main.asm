@@ -90,6 +90,9 @@ Init:
 		DEF i+=1
 	ENDR
 
+	ld a, 0
+	ld [rVBK], a
+
 	; During the first (blank) frame, initialize display registers
 	ld a, [wHardware]
 	and a, 1
