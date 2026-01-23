@@ -16,7 +16,7 @@ DEF MOVE_STATE_DEAD  EQU 3
 
 
 DEF MAPSIZE EQU ((EndTileMap - TileMap)/32)
-DEF MAP_LOAD_AT_START EQU 20
+DEF MAP_LOAD_AT_START EQU 18
 
 
 SECTION "Characters", WRAM0
@@ -371,63 +371,14 @@ Process:
 adjustScreenPos:
 	ld a, [Player.y]
 	sub a, 108
+	jp nc, .no_edge_top
+	ld a, 0
+	.no_edge_top:
+	cp a, 112
+	jp c, .no_edge_bottom
+	ld a, 111
+	.no_edge_bottom:
 	ld [rSCY], a
-
-	ld a, [rSCY]
-	; --- map scrolling logic ---
-	srl a
-	srl a
-	srl a
-	ld b, a
-	ld a, [wPrevSCY]
-	cp a, b
-	ret z ; TODO: expect this to throw random stuff on screen if is scrolled DOWN!
-	
-	ld a, b
-	ld [wPrevSCY], a
-
-	ld a, [wMapScrollActivated]
-	and a
-	ret z
-
-	; set in DE the ROM addr to load from
-	ld a, [wMinMapLoaded]
-	inc a
-	ld [wMinMapLoaded], a
-
-	; calculating: bc := (MAPSIZE - wMinMapLoaded)*32
-	ld a, [wMinMapLoaded]
-	ld b, a
-	ld a, MAPSIZE
-	sub a, b
-	ld c, a
-	mul32
-
-	; calculating de := Tilemap + bc  
-	;	NOTE: TileMap is aligned by 8-bit (i.e. LOW(TileMap) == 0)
-	; this simplifies the calculation:
-	; 	HIGH(TileMap + bc) == HIGH(TileMap) + b
-	;		LOW(TileMap + bc) == c
-	ld a, HIGH(TileMap)
-	add a, b
-	ld d, a
-	ld e, c
-	push de
-
-	; set in HL the vram addr to load to
-	ld a, [wPrevSCY]
-	ld c, a
-	mul32
-	ld h, b
-	ld l, c
-	ld a, $98
-	add a, h
-	ld h, a
-
-	pop de
-	ld bc, 32
-	call Memcpy
-
 	ret
 
 ; @return: set in A the enemy address (with 'Enemies' subtracted to save 1 byte)
