@@ -49,6 +49,20 @@ MACRO RGB_Set
 	ld [rBCPD], a
 ENDM
 
+MACRO OBJ_RGB_Set
+	ld a, ((\2) & $7)
+	swap a
+	sla a
+	or \1
+	ld [rOCPD], a
+
+	ld a, \3
+	sla a
+	sla a
+	or a, ((\2) >> 3)
+	ld [rOCPD], a
+ENDM
+
 MACRO INIT_GBC_PALETTE
   ;NOTE Screen Must be off!
 	ld a, $80
@@ -71,6 +85,26 @@ MACRO INIT_GBC_PALETTE
   RGB_Set 10, 10, 10
   RGB_Set 20, 20, 20
   RGB_Set 30, 30, 30
+
+  ld a, $80
+  ld [rOCPS], a
+
+
+  ;bird (yellowish)
+  OBJ_RGB_Set 31, 31, 31 ; ignored
+  OBJ_RGB_Set 5, 4, 1
+  OBJ_RGB_Set 31, 31, 0
+  OBJ_RGB_Set 29, 12, 10
+  
+  ;Enemy (Magentaish)
+  OBJ_RGB_Set 31, 31, 31 ; ignored
+  OBJ_RGB_Set 8, 8, 8
+  OBJ_RGB_Set 10, 0, 10
+  OBJ_RGB_Set 12, 6, 21
+
+  REPT 24
+  OBJ_RGB_Set 0, 0, 0
+  ENDR
 
 ENDM
 
